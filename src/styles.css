@@ -1,0 +1,815 @@
+* { 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: white;
+}
+
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background-color: white;
+    padding-top: 20px;
+    z-index: 10;
+    border-right: 1px solid rgb(219, 219, 219);
+}
+
+.sidebar .logo h1 a{
+    color: #4CAF50;
+    font-size: 24px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    margin-left: 50px;
+    text-decoration: none;
+}
+
+.sidebar .logo h1 a:hover {
+    color: #3e8e41; /* Cambia el color al pasar el mouse */
+}
+
+.sidebar .menu {
+    list-style: none;
+    padding-left: 0;
+}
+
+.sidebar .menu li {
+    margin: 20px 0;
+}
+
+.sidebar .menu-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 5px;
+    font-size: 18px;
+    color: white;
+}
+
+.submenu {
+    list-style: none;
+    padding-left: 20px;
+    display: none;
+}
+
+.submenu li {
+    margin: 5px 0;
+}
+
+.submenu li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+}
+
+.arrow {
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.submenu-active .arrow {
+    transform: rotate(180deg);
+}
+
+.submenu-active .submenu {
+    display: block; /* Mostrar submenú cuando esté activo */
+}
+
+.sidebar .menu-item:hover {
+    background-color: #3e8e41;
+}
+
+.sidebar .menu li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    display: flex; /* Cambiado a flex para alinear íconos y texto */
+    align-items: center; /* Para centrar el ícono verticalmente con el texto */
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.sidebar .menu li a i {
+    margin-right: 10px; /* Espacio entre el ícono y el texto */
+    font-size: 20px;
+    color: #4CAF50; /* Color del ícono */
+}
+
+.sidebar .menu li a:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.main-content {
+    margin-left: 250px;
+}
+
+/* Top Navbar */
+.top-navbar {
+    background-color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgb(219, 219, 219);
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+}
+
+.nav-item {
+    position: relative;
+    margin-right: 30px;
+    cursor: pointer;
+}
+
+.nav-item i {
+    font-size: 24px;
+    color: #4CAF50;
+}
+
+/* Submenu */
+.submenu {
+    display: none;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.submenu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.submenu ul li {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+.submenu ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.submenu ul li a:hover {
+    text-decoration: underline;
+}
+
+.submenu.show {
+    display: block;
+}
+
+/* Header and Content Sections */
+.header, .expired-products {
+    background-color: #f1f3f5;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid rgb(194, 194, 194);
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+    
+}
+
+table th {
+    background-color: #f0f0f0;
+}
+
+table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Footer styles */
+footer {
+    background-color: #bfffca;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    border-top: 1px solid black;
+}
+
+footer p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+footer ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: #4CAF50;
+    font-size: 14px;
+}
+
+footer ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Modo oscuro */
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+body.dark-mode .sidebar {
+    background-color: #333333;
+}
+
+body.dark-mode .menu li a {
+    color: #ffffff;
+}
+
+body.dark-mode .menu li a:hover {
+    background-color: #555555;
+    color: #ffffff;
+}
+
+body.dark-mode .top-navbar {
+    background-color: #333333;
+}
+
+body.dark-mode table th, 
+body.dark-mode table td {
+    background-color: #000000; /* Fondo negro para celdas */
+    border: 1px solid #ffffff; /* Bordes blancos */
+    color: #ffffff; /* Texto blanco */
+}
+
+body.dark-mode .header, 
+body.dark-mode .expired-products {
+    background-color: #000000; /* Fondo negro para los contenedores de tablas */
+    border: 1px solid #ffffff; /* Bordes blancos para el contenedor */
+    color: #ffffff; /* Texto blanco en los contenedores */
+}
+
+body.dark-mode table th {
+    background-color: #333333; /* Fondo gris oscuro para encabezados de tabla */
+}
+
+body.dark-mode table tbody tr:hover {
+    background-color: #555555; /* Fondo gris oscuro al pasar el mouse por las filas */
+}
+
+body.dark-mode footer {
+    background-color: #2b2b2b;
+}
+
+/* Tamaño de texto grande */
+body.large-text {
+    font-size: 1.2em;
+}
+
+body.large-text h2 {
+    font-size: 1.5em;
+}
+
+.submenu-active {
+    display: block;
+  }
+
+.submenu {
+    display: none;
+}
+
+/* Dropdown para Inventario y Reportes */
+.dropdown-list {
+list-style: none;
+padding: 10px;
+margin: 0;
+background-color: #f9f9f9;
+border: 1px solid #ddd;
+border-radius: 8px;
+}
+
+.dropdown-list li {
+padding: 10px;
+font-size: 16px;
+position: relative; /* Para los círculos */
+}
+
+.dropdown-list li a {
+text-decoration: none;
+color: #333;
+}
+
+.dropdown-list li a:hover {
+background-color: #e5e5e5;
+color: #000;
+border-radius: 5px;
+}
+
+/* Estilo del círculo antes de cada opción */
+.dropdown-list li::before {
+content: "○";
+position: absolute;
+left: -25px; /* Ajusta la posición del círculo */
+top: 12px; /* Ajusta la alineación vertical */
+font-size: 12px;
+color: #333;
+}
+
+/* Flecha rotada para cuando está abierto */
+.arrow.submenu-active {
+transform: rotate(180deg);
+}
+
+/* Otros estilos generales */
+.menu-item {
+cursor: pointer;
+}
+
+/* Modo oscuro para dropdown */
+body.dark-mode .dropdown-list {
+background-color: #333333; /* Fondo oscuro */
+border: 1px solid #555555; /* Bordes más oscuros */
+}
+
+body.dark-mode .dropdown-list li a {
+color: #ffffff; /* Texto claro */
+}
+
+body.dark-mode .dropdown-list li a:hover {
+background-color: #555555; /* Hover más oscuro */
+color: #ffffff; /* Texto claro al hacer hover */
+}
+
+body.dark-mode .dropdown-list li::before {
+color: #ffffff; /* Círculo claro */
+}
+  
+/* ----------------------------------------------------- */
+.product-add-form {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.product-add-form h2 {
+    margin-top: 40px;
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.product-add-form p {
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-confirm {
+  background-color: #FFA500;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-confirm:hover {
+  background-color: #e69500;
+}
+
+.btn-cancel {
+  background-color: #555555;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background-color: #444444;
+}
+
+/* ----------------------------------------------------- */
+/* Estilo general de la lista de productos */
+.product-list {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .product-list h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .product-list p {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .table-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .search-bar input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 15px;
+  }
+  
+  .btn-add-new {
+    background-color: #FFA500;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .btn-add-new a{
+    text-decoration: none;
+    color: white;
+  }
+  
+  .btn-add-new:hover {
+    background-color: #e69500;
+  }
+  
+  /* Estilo de la tabla */
+  .product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .product-table th,
+  .product-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .product-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+  
+  .product-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Estilo de los botones de acción */
+  .action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+  }
+  
+  .view-btn {
+    color: #007bff;
+  }
+  
+  .edit-btn {
+    color: #28a745;
+  }
+  
+  .delete-btn {
+    color: #dc3545;
+  }
+  
+  /* Paginación */
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .page-info {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .pagination select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  
+/* Login Styles */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.login-box {
+  background-color: white;
+  border-radius: 10px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-logo img {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+input {
+  width: 100%;
+  padding: 12px 40px 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.input-icon {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.forgot-link {
+  color: #FFA500;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.form-actions {
+  margin-top: 20px;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background-color: #FFA500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-login:hover {
+  background-color: #e69500;
+}
+
+.signup-link {
+  margin-top: 20px;
+  color: #666;
+}
+
+.signup-link a {
+  color: #FFA500;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------- */
+/* Login Styles */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+  }
+  
+  .login-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .login-logo img {
+    width: 150px;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .input-wrapper {
+    position: relative;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px 40px 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .input-icon {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .forgot-password {
+    text-align: right;
+    margin-bottom: 20px;
+  }
+  
+  .forgot-link {
+    color: #FFA500;
+    text-decoration: none;
+  }
+  
+  .forgot-link:hover {
+    text-decoration: underline;
+  }
+  
+  .form-actions {
+    margin-top: 20px;
+  }
+  
+  .btn-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #FFA500;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .btn-login a{
+    color: white;
+    text-decoration:none;
+
+  }
+  
+  .btn-login:hover {
+    background-color: #e69500;
+  }
+  
+  .signup-link {
+    margin-top: 20px;
+    color: #666;
+  }
+  
+  .signup-link a {
+    color: #FFA500;
+    text-decoration: none;
+  }
+  
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+  
