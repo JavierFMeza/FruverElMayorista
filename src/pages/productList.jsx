@@ -1,32 +1,50 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Importamos Link para redirección
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { toggleDarkMode, toggleTextSize } from '../utils/utils';
 import '../styles.css';
 
 function ProductList() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLargeText, setIsLargeText] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // Controla cuál menú desplegable está abierto en la sidebar
-  const [openTopMenu, setOpenTopMenu] = useState(null); // Controla cuál menú desplegable está abierto en la top navbar
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openTopMenu, setOpenTopMenu] = useState(null);
+  const [products, setProducts] = useState([]); // Estado para almacenar los productos
+  const [loading, setLoading] = useState(true); // Estado para el loading
 
-  // Efecto para manejar el modo oscuro en el body
-  React.useEffect(() => {
+  // Efecto para manejar el modo oscuro
+  useEffect(() => {
     toggleDarkMode(isDarkMode);
   }, [isDarkMode]);
 
-  // Efecto para manejar el tamaño del texto en el body
-  React.useEffect(() => {
+  // Efecto para manejar el tamaño del texto
+  useEffect(() => {
     toggleTextSize(isLargeText);
   }, [isLargeText]);
 
-  // Función para alternar la visibilidad del menú desplegable en la sidebar
+  // Efecto para obtener productos desde el backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3301/api/products'); // Ajusta esta URL a tu backend
+        setProducts(response.data); // Establecer productos desde la respuesta
+        setLoading(false);
+      } catch (error) {
+        console.error('Error al obtener productos:', error);
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // Función para alternar el menú desplegable en la sidebar
   const toggleDropdown = (menu) => {
-    setOpenDropdown(openDropdown === menu ? null : menu); // Cierra el menú abierto o abre el nuevo
+    setOpenDropdown(openDropdown === menu ? null : menu);
   };
 
-  // Función para alternar la visibilidad del menú desplegable en la top navbar
+  // Función para alternar el menú desplegable en la top navbar
   const toggleTopMenu = (menu) => {
-    setOpenTopMenu(openTopMenu === menu ? null : menu); // Cierra el menú abierto o abre el nuevo en la top navbar
+    setOpenTopMenu(openTopMenu === menu ? null : menu);
   };
 
   return (
@@ -112,125 +130,37 @@ function ProductList() {
           </div>
         </div>
 
-        {/* Aquí se genera la tabla de lista de productos */}
+        {/* Tabla de productos */}
         <div className="product-list">
           <h2>Lista de productos</h2>
           <p>Gestiona tus productos</p>
 
-          <div className="table-controls">
-            <div className="search-bar">
-              <input type="text" placeholder="Search..." />
-            </div>
-            <button className="btn-add-new"><Link to="/productAdd">Añadir Producto</Link></button>
-          </div>
-
-          <table className="product-table">
-            <thead>
-              <tr>
-                <th><input type="checkbox" /></th>
-                <th>Nombre</th>
-                <th>No</th>
-                <th>Precio</th>
-                <th>Unidades</th>
-                <th>Creado por</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Manzanas</td>
-                <td>PT001</td>
-                <td>$900</td>
-                <td>100</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Peras</td>
-                <td>PT002</td>
-                <td>$1200</td>
-                <td>150</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Lechuga</td>
-                <td>PT003</td>
-                <td>$750</td>
-                <td>200</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Zanahorias</td>
-                <td>PT004</td>
-                <td>$650</td>
-                <td>300</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Tomates</td>
-                <td>PT005</td>
-                <td>$800</td>
-                <td>250</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Aguacates</td>
-                <td>PT006</td>
-                <td>$1700</td>
-                <td>40</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              
-            </tbody>
-          </table>
-
-          <div className="pagination">
-            <span>Show per page:</span>
-            <select>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-            </select>
-
-            <div className="page-info">
-              <span>1 - 7 of 7 items</span>
-            </div>
-          </div>
+          {loading ? (
+            <p>Cargando productos...</p>
+          ) : (
+            <table className="product-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" /></th>
+                  <th>Nombre</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Fecha de Ingreso</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product) => (
+                  <tr key={product.id}>
+                    <td><input type="checkbox" /></td>
+                    <td>{product.nombre}</td>
+                    <td>${product.precio}</td>
+                    <td>{product.cantidad}</td>
+                    <td>{product.fecha_ingreso}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 

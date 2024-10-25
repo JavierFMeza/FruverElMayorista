@@ -1,8 +1,8 @@
-# React + Vite
+# Proyecto Integrador
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Fruver El Mayorista es una aplicación web diseñada para gestionar el inventario de un comercio de frutas y verduras (fruver). La aplicación permite a los usuarios administrar productos, controlar el stock, generar reportes sobre productos que están por vencerse o agotarse, y mantener un registro de las ventas y compras.
 
-Currently, two official plugins are available:
+Este proyecto sigue una arquitectura de vista-controlador y está organizado bajo una arquitectura de servicios, lo que permite una separación clara entre el frontend y el backend, facilitando la escalabilidad y el mantenimiento de la aplicación.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Actualmente se usan los frameworks/plugins react y vite
+
