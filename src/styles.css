@@ -1,815 +1,926 @@
-* { 
+/* Reseteo básico para eliminar márgenes y padding en todos los elementos,
+   además de asegurarse que el tamaño del contenido sea consistente */
+   * { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Estilos globales para el body, definiendo fuente, estructura flex para
+   mantener el contenido centrado verticalmente, y un color de fondo blanco */
 body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100vh; /* Hace que el body cubra toda la altura de la ventana */
     background-color: white;
 }
 
+/* Sidebar (barra lateral) se posiciona de manera fija a la izquierda,
+   cubriendo toda la altura de la ventana y tiene un fondo blanco */
 .sidebar {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100vh;
-    width: 250px;
+    height: 100vh; /* La altura del sidebar es igual a la altura total de la ventana */
+    width: 250px; /* Ancho fijo del sidebar */
     background-color: white;
-    padding-top: 20px;
-    z-index: 10;
-    border-right: 1px solid rgb(219, 219, 219);
+    padding-top: 20px; /* Espaciado superior */
+    z-index: 10; /* Asegura que el sidebar esté encima de otros elementos */
+    border-right: 1px solid rgb(219, 219, 219); /* Borde derecho para dar separación */
 }
 
-.sidebar .logo h1 a{
-    color: #4CAF50;
+/* Estilos para el logo en el sidebar, específicamente el texto del logo con un enlace */
+.sidebar .logo h1 a {
+    color: #4CAF50; /* Color verde para el texto del logo */
     font-size: 24px;
-    text-transform: uppercase;
-    margin-bottom: 40px;
-    margin-left: 50px;
-    text-decoration: none;
+    text-transform: uppercase; /* Texto en mayúsculas */
+    margin-bottom: 40px; /* Espacio inferior para separarlo del menú */
+    margin-left: 50px; /* Desplazamiento hacia la derecha del logo */
+    text-decoration: none; /* Sin subrayado en el enlace */
 }
 
+/* Cambia el color del logo cuando se pasa el cursor sobre él */
 .sidebar .logo h1 a:hover {
-    color: #3e8e41; /* Cambia el color al pasar el mouse */
+    color: #3e8e41; /* Un verde más oscuro al hacer hover */
 }
 
+/* El menú en la barra lateral no tiene estilo de lista (puntos/bullets) y se elimina el padding */
 .sidebar .menu {
-    list-style: none;
-    padding-left: 0;
+    list-style: none; /* Elimina los puntos de lista */
+    padding-left: 0; /* Elimina el padding por defecto en listas */
 }
 
+/* Separación entre los elementos del menú */
 .sidebar .menu li {
     margin: 20px 0;
 }
 
+/* Estilos para los enlaces del menú en la barra lateral */
 .sidebar .menu-item {
-    display: flex;
-    justify-content: space-between;
+    display: flex; /* Flexbox para alinear el texto e íconos en una misma línea */
+    justify-content: space-between; /* Separa el contenido a los lados del contenedor */
     padding: 10px;
     text-decoration: none;
     color: #333;
-    border-radius: 5px;
+    border-radius: 5px; /* Bordes redondeados para los elementos del menú */
     font-size: 18px;
-    color: white;
+    color: white; /* Color del texto blanco */
 }
 
+/* Submenú oculto inicialmente, sin estilo de lista */
 .submenu {
-    list-style: none;
-    padding-left: 20px;
-    display: none;
+    list-style: none; /* Elimina los puntos de lista */
+    padding-left: 20px; /* Desplazamiento a la derecha para diferenciarlo visualmente */
+    display: none; /* Oculta el submenú inicialmente */
 }
 
+/* Espaciado entre los elementos del submenú */
 .submenu li {
     margin: 5px 0;
 }
 
+/* Estilos para los enlaces dentro del submenú */
 .submenu li a {
     text-decoration: none;
-    color: #333;
+    color: #333; /* Color gris oscuro para los enlaces del submenú */
     font-size: 16px;
 }
 
+/* Estilos para la flecha que indica si el submenú está activo o no */
 .arrow {
     font-size: 14px;
-    margin-left: 5px;
+    margin-left: 5px; /* Espacio entre la flecha y el texto */
 }
 
+/* Rotación de la flecha cuando el submenú está activo */
 .submenu-active .arrow {
-    transform: rotate(180deg);
+    transform: rotate(180deg); /* Rotación de la flecha cuando está abierto */
 }
 
+/* Muestra el submenú cuando está activo */
 .submenu-active .submenu {
-    display: block; /* Mostrar submenú cuando esté activo */
+    display: block; /* Muestra el submenú cuando el menú padre está activo */
 }
 
+/* Efecto hover en los elementos del menú principal */
 .sidebar .menu-item:hover {
-    background-color: #3e8e41;
+    background-color: #3e8e41; /* Cambia a un verde más oscuro al pasar el mouse */
 }
 
+/* Estilos para los enlaces en los elementos de la lista del menú */
 .sidebar .menu li a {
-    text-decoration: none;
-    color: #333;
-    font-size: 18px;
-    display: flex; /* Cambiado a flex para alinear íconos y texto */
-    align-items: center; /* Para centrar el ícono verticalmente con el texto */
+    text-decoration: none; /* Elimina subrayado */
+    color: #333; /* Color gris oscuro */
+    font-size: 18px; /* Tamaño de fuente grande */
+    display: flex; /* Flexbox para alinear íconos y texto */
+    align-items: center; /* Centra el ícono verticalmente con el texto */
     padding: 10px 15px;
-    border-radius: 5px;
+    border-radius: 5px; /* Bordes redondeados para los elementos */
 }
 
+/* Estilos para los íconos dentro del menú */
 .sidebar .menu li a i {
-    margin-right: 10px; /* Espacio entre el ícono y el texto */
-    font-size: 20px;
-    color: #4CAF50; /* Color del ícono */
+    margin-right: 10px; /* Espaciado entre el ícono y el texto */
+    font-size: 20px; /* Tamaño del ícono */
+    color: #4CAF50; /* Color verde del ícono */
 }
 
+/* Efecto hover para cambiar el color del fondo y el texto al pasar el mouse */
 .sidebar .menu li a:hover {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #4CAF50; /* Fondo verde al hacer hover */
+    color: white; /* Texto blanco al hacer hover */
 }
 
+/* Desplazamiento del contenido principal para dejar espacio a la barra lateral */
 .main-content {
-    margin-left: 250px;
+    margin-left: 250px; /* Desplaza el contenido principal 250px a la derecha para dejar espacio al sidebar */
 }
 
-/* Top Navbar */
+/* Barra de navegación superior (Top Navbar) */
 .top-navbar {
-    background-color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: flex-end;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgb(219, 219, 219);
+  background-color: white; /* Fondo blanco */
+  padding: 10px 20px; /* Espaciado interior */
+  display: flex; /* Uso de flexbox para alinear el contenido horizontalmente */
+  justify-content: flex-end; /* Alinea los elementos de la navbar al final (derecha) */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave debajo de la barra para darle profundidad */
+  border-bottom: 1px solid rgb(219, 219, 219); /* Borde inferior gris */
 }
 
+/* Contenedor de los íconos de navegación */
 .nav-icons {
-    display: flex;
-    align-items: center;
+  display: flex; /* Flexbox para colocar íconos horizontalmente */
+  align-items: center; /* Centrar los íconos verticalmente */
 }
 
+/* Cada ítem de navegación dentro de la barra superior */
 .nav-item {
-    position: relative;
-    margin-right: 30px;
-    cursor: pointer;
+  position: relative; /* Para posicionar el submenu debajo del ítem correspondiente */
+  margin-right: 30px; /* Separación entre los ítems */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
 }
 
+/* Estilos para los íconos en la barra de navegación */
 .nav-item i {
-    font-size: 24px;
-    color: #4CAF50;
+  font-size: 24px; /* Tamaño del ícono */
+  color: #4CAF50; /* Color verde */
 }
 
-/* Submenu */
+/* Submenú desplegable */
 .submenu {
-    display: none;
-    position: absolute;
-    top: 35px;
-    right: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    z-index: 100;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: none; /* Inicialmente oculto */
+  position: absolute; /* Posicionamiento absoluto respecto al ítem de navegación */
+  top: 35px; /* Posiciona el submenu justo debajo del ítem de navegación */
+  right: 0; /* Alinea el submenu al lado derecho del ítem */
+  background-color: white; /* Fondo blanco */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 10px; /* Espaciado interior */
+  z-index: 100; /* Asegura que el submenu esté por encima de otros elementos */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave para el submenu */
 }
 
+/* Lista dentro del submenu */
 .submenu ul {
-    list-style: none;
-    padding: 0;
+  list-style: none; /* Elimina los puntos de la lista */
+  padding: 0; /* Elimina el padding por defecto */
 }
 
+/* Elementos dentro de la lista del submenu */
 .submenu ul li {
-    padding: 10px 20px;
-    font-size: 14px;
+  padding: 10px 20px; /* Espaciado dentro de cada ítem */
+  font-size: 14px; /* Tamaño de fuente más pequeño */
 }
 
+/* Enlaces dentro del submenu */
 .submenu ul li a {
-    text-decoration: none;
-    color: #333;
+  text-decoration: none; /* Sin subrayado en los enlaces */
+  color: #333; /* Color de texto gris oscuro */
 }
 
+/* Subrayado al pasar el mouse sobre un enlace del submenu */
 .submenu ul li a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
+/* Muestra el submenu cuando tiene la clase "show" */
 .submenu.show {
-    display: block;
+  display: block; /* Hace visible el submenu */
 }
 
-/* Header and Content Sections */
+/* Sección de encabezados y contenido (ej: tablas de productos expirados) */
 .header, .expired-products {
-    background-color: #f1f3f5;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    border: 1px solid rgb(194, 194, 194);
+  background-color: #f1f3f5; /* Fondo gris claro */
+  padding: 20px; /* Espaciado interior */
+  margin-bottom: 20px; /* Margen inferior para separación entre secciones */
+  border-radius: 8px; /* Bordes redondeados */
+  border: 1px solid rgb(194, 194, 194); /* Borde gris claro */
 }
 
+/* Encabezados */
 h2 {
-    margin-bottom: 20px;
-    font-size: 20px;
+  margin-bottom: 20px; /* Margen inferior para separación del contenido */
+  font-size: 20px; /* Tamaño de fuente */
 }
 
+/* Tablas */
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%; /* La tabla ocupa todo el ancho disponible */
+  border-collapse: collapse; /* Elimina el espacio entre bordes de las celdas */
 }
 
+/* Estilos para las celdas de las tablas (th para encabezados, td para datos) */
 table th, table td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-    
+  padding: 10px; /* Espaciado interior de cada celda */
+  border: 1px solid #ccc; /* Bordes de las celdas en gris claro */
+  text-align: left; /* Alineación del texto a la izquierda */
 }
 
+/* Encabezados de las tablas */
 table th {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0; /* Fondo gris claro para los encabezados */
 }
 
+/* Cambio de fondo al pasar el mouse sobre una fila de la tabla */
 table tbody tr:hover {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9; /* Fondo ligeramente más claro */
 }
 
-/* Footer styles */
+/* Estilos para el pie de página (Footer) */
 footer {
-    background-color: #bfffca;
-    text-align: center;
-    padding: 15px 0;
-    margin-top: auto;
-    width: 100%;
-    position: relative;
-    bottom: 0;
-    border-top: 1px solid black;
+  background-color: #bfffca; /* Fondo verde claro */
+  text-align: center; /* Centra el texto dentro del footer */
+  padding: 15px 0; /* Espaciado interior arriba y abajo */
+  margin-top: auto; /* Asegura que el footer se mantenga en la parte inferior del contenido */
+  width: 100%; /* El footer ocupa todo el ancho disponible */
+  position: relative; /* Posicionamiento relativo para ajustarlo dentro del flujo de la página */
+  bottom: 0; /* Posiciona el footer al fondo de la página */
+  border-top: 1px solid black; /* Borde superior negro */
 }
 
 footer p {
-    margin-bottom: 10px;
-    font-size: 14px;
-    color: #666;
+  margin-bottom: 10px; /* Margen inferior entre el párrafo y el contenido inferior */
+  font-size: 14px; /* Tamaño de fuente pequeño */
+  color: #666; /* Color gris claro para el texto */
 }
 
 footer ul {
-    list-style: none;
-    padding: 0;
+  list-style: none; /* Elimina los puntos de la lista no ordenada */
+  padding: 0; /* Elimina el padding por defecto de la lista */
 }
 
 footer ul li {
-    display: inline;
-    margin-right: 15px;
+  display: inline; /* Coloca los ítems de la lista en línea */
+  margin-right: 15px; /* Espacio entre los ítems de la lista */
 }
 
 footer ul li a {
-    text-decoration: none;
-    color: #4CAF50;
-    font-size: 14px;
+  text-decoration: none; /* Elimina el subrayado de los enlaces */
+  color: #4CAF50; /* Color verde para los enlaces */
+  font-size: 14px; /* Tamaño de fuente pequeño */
 }
 
 footer ul li a:hover {
-    text-decoration: underline;
+  text-decoration: underline; /* Subraya los enlaces al pasar el mouse */
 }
 
-/* Modo oscuro */
+/* Modo oscuro (Dark mode) */
 body.dark-mode {
-    background-color: #1e1e1e;
-    color: #ffffff;
+  background-color: #1e1e1e; /* Fondo negro para el cuerpo de la página */
+  color: #ffffff; /* Texto blanco por defecto */
 }
 
 body.dark-mode .sidebar {
-    background-color: #333333;
+  background-color: #333333; /* Fondo gris oscuro para la barra lateral */
 }
 
 body.dark-mode .menu li a {
-    color: #ffffff;
+  color: #ffffff; /* Texto blanco para los enlaces del menú en modo oscuro */
 }
 
 body.dark-mode .menu li a:hover {
-    background-color: #555555;
-    color: #ffffff;
+  background-color: #555555; /* Fondo gris más claro al pasar el mouse */
+  color: #ffffff; /* Mantiene el texto en blanco al pasar el mouse */
 }
 
 body.dark-mode .top-navbar {
-    background-color: #333333;
+  background-color: #333333; /* Fondo gris oscuro para la barra de navegación superior */
 }
 
+/* Modo oscuro para tablas */
 body.dark-mode table th, 
 body.dark-mode table td {
-    background-color: #000000; /* Fondo negro para celdas */
-    border: 1px solid #ffffff; /* Bordes blancos */
-    color: #ffffff; /* Texto blanco */
+  background-color: #000000; /* Fondo negro para las celdas de las tablas */
+  border: 1px solid #ffffff; /* Bordes blancos para las celdas */
+  color: #ffffff; /* Texto blanco dentro de las celdas */
 }
 
 body.dark-mode .header, 
 body.dark-mode .expired-products {
-    background-color: #000000; /* Fondo negro para los contenedores de tablas */
-    border: 1px solid #ffffff; /* Bordes blancos para el contenedor */
-    color: #ffffff; /* Texto blanco en los contenedores */
+  background-color: #000000; /* Fondo negro para las secciones de encabezados y productos expirados */
+  border: 1px solid #ffffff; /* Bordes blancos alrededor de estas secciones */
+  color: #ffffff; /* Texto blanco dentro de estas secciones */
 }
 
 body.dark-mode table th {
-    background-color: #333333; /* Fondo gris oscuro para encabezados de tabla */
+  background-color: #333333; /* Fondo gris oscuro para los encabezados de las tablas */
 }
 
 body.dark-mode table tbody tr:hover {
-    background-color: #555555; /* Fondo gris oscuro al pasar el mouse por las filas */
+  background-color: #555555; /* Fondo gris más claro al pasar el mouse sobre una fila */
 }
 
+/* Modo oscuro para el pie de página */
 body.dark-mode footer {
-    background-color: #2b2b2b;
+  background-color: #2b2b2b; /* Fondo gris oscuro para el footer */
 }
 
-/* Tamaño de texto grande */
+/* Modo de texto grande (Large Text) */
 body.large-text {
-    font-size: 1.2em;
+  font-size: 1.2em; /* Aumenta el tamaño del texto en todo el cuerpo de la página */
 }
 
 body.large-text h2 {
-    font-size: 1.5em;
+  font-size: 1.5em; /* Aumenta el tamaño del texto para los encabezados h2 */
 }
 
+/* Control de submenús desplegables */
 .submenu-active {
-    display: block;
-  }
+  display: block; /* Muestra el submenú cuando está activo */
+}
 
 .submenu {
-    display: none;
+  display: none; /* Oculta el submenú por defecto */
 }
 
-/* Dropdown para Inventario y Reportes */
+
+/* Estilos generales para el dropdown de Inventario y Reportes */
 .dropdown-list {
-list-style: none;
-padding: 10px;
-margin: 0;
-background-color: #f9f9f9;
-border: 1px solid #ddd;
-border-radius: 8px;
+  list-style: none; /* Elimina los puntos de lista predeterminados */
+  padding: 10px; /* Espacio interior para separar las opciones */
+  margin: 0; /* Elimina el margen predeterminado */
+  background-color: #f9f9f9; /* Fondo gris claro */
+  border: 1px solid #ddd; /* Borde gris claro */
+  border-radius: 8px; /* Bordes redondeados para el dropdown */
 }
 
+/* Estilos para los elementos individuales dentro del dropdown */
 .dropdown-list li {
-padding: 10px;
-font-size: 16px;
-position: relative; /* Para los círculos */
+  padding: 10px; /* Espaciado dentro de cada ítem */
+  font-size: 16px; /* Tamaño de fuente moderado */
+  position: relative; /* Permite posicionar elementos (como el círculo) de manera absoluta dentro del li */
 }
 
+/* Estilos para los enlaces dentro de cada ítem del dropdown */
 .dropdown-list li a {
-text-decoration: none;
-color: #333;
+  text-decoration: none; /* Elimina el subrayado de los enlaces */
+  color: #333; /* Color del texto gris oscuro */
 }
 
 .dropdown-list li a:hover {
-background-color: #e5e5e5;
-color: #000;
-border-radius: 5px;
+  background-color: #e5e5e5; /* Fondo gris más claro al pasar el mouse */
+  color: #000; /* Cambia el color del texto a negro al hacer hover */
+  border-radius: 5px; /* Bordes redondeados cuando se hace hover en el enlace */
 }
 
-/* Estilo del círculo antes de cada opción */
+/* Círculo que aparece antes de cada opción del dropdown */
 .dropdown-list li::before {
-content: "○";
-position: absolute;
-left: -25px; /* Ajusta la posición del círculo */
-top: 12px; /* Ajusta la alineación vertical */
-font-size: 12px;
-color: #333;
+  content: "○"; /* Inserta un símbolo de círculo vacío antes del texto */
+  position: absolute; /* Posicionamiento absoluto para el círculo */
+  left: -25px; /* Desplaza el círculo hacia la izquierda del texto */
+  top: 12px; /* Alineación vertical para centrar el círculo */
+  font-size: 12px; /* Tamaño del círculo */
+  color: #333; /* Color gris oscuro del círculo */
 }
 
-/* Flecha rotada para cuando está abierto */
+/* Flecha rotada para indicar que el menú está desplegado */
 .arrow.submenu-active {
-transform: rotate(180deg);
+  transform: rotate(180deg); /* Rota la flecha 180 grados cuando el menú está activo */
 }
 
-/* Otros estilos generales */
+/* Estilo general para los ítems del menú */
 .menu-item {
-cursor: pointer;
+  cursor: pointer; /* Cambia el cursor a puntero (mano) cuando se pasa sobre el ítem */
 }
 
-/* Modo oscuro para dropdown */
+/* Estilos del dropdown para el modo oscuro */
 body.dark-mode .dropdown-list {
-background-color: #333333; /* Fondo oscuro */
-border: 1px solid #555555; /* Bordes más oscuros */
+  background-color: #333333; /* Fondo oscuro para el dropdown */
+  border: 1px solid #555555; /* Bordes más oscuros en modo oscuro */
 }
 
 body.dark-mode .dropdown-list li a {
-color: #ffffff; /* Texto claro */
+  color: #ffffff; /* Texto blanco en modo oscuro */
 }
 
 body.dark-mode .dropdown-list li a:hover {
-background-color: #555555; /* Hover más oscuro */
-color: #ffffff; /* Texto claro al hacer hover */
+  background-color: #555555; /* Fondo gris más oscuro cuando se hace hover en modo oscuro */
+  color: #ffffff; /* Mantiene el texto blanco al hacer hover */
 }
 
 body.dark-mode .dropdown-list li::before {
-color: #ffffff; /* Círculo claro */
+  color: #ffffff; /* Círculo blanco en modo oscuro */
 }
+
   
 /* ----------------------------------------------------- */
+/* Estilos generales del formulario de agregar producto */
 .product-add-form {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  margin-top: 20px;
+  background-color: #f9f9f9; /* Fondo gris claro */
+  padding: 20px; /* Espaciado interior */
+  border-radius: 8px; /* Bordes redondeados */
+  margin-top: 20px; /* Espacio superior */
 }
 
+/* Estilo para el título del formulario */
 .product-add-form h2 {
-    margin-top: 40px;
-  font-size: 24px;
-  margin-bottom: 30px;
+  margin-top: 40px; /* Margen superior amplio */
+  font-size: 24px; /* Tamaño de fuente grande */
+  margin-bottom: 30px; /* Margen inferior amplio */
 }
 
+/* Estilo para el párrafo de descripción */
 .product-add-form p {
-  font-size: 14px;
-  color: #666;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  font-size: 14px; /* Tamaño de fuente más pequeño */
+  color: #666; /* Color gris claro para el texto */
+  margin-top: 10px; /* Margen superior pequeño */
+  margin-bottom: 20px; /* Margen inferior */
 }
 
+/* Estilo para organizar los campos del formulario en filas */
 .form-row {
-  display: flex;
-  gap: 30px;
-  margin-bottom: 10px;
+  display: flex; /* Flexbox para alinear los campos en una fila */
+  gap: 30px; /* Espacio entre los campos */
+  margin-bottom: 10px; /* Margen inferior entre filas */
 }
 
+/* Estilos para los grupos de formularios individuales */
 .form-group {
-  flex: 1;
+  flex: 1; /* Toma el mismo espacio en la fila para todos los elementos */
   display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+  flex-direction: column; /* Coloca las etiquetas sobre los campos */
+  margin-bottom: 20px; /* Margen inferior entre cada campo */
 }
 
+/* Estilo para las etiquetas de los campos */
 .form-group label {
-  margin-bottom: 5px;
-  font-weight: bold;
+  margin-bottom: 5px; /* Margen inferior pequeño */
+  font-weight: bold; /* Texto en negrita para las etiquetas */
 }
 
+/* Estilos compartidos para los inputs, selects y textareas */
 .form-group input, 
 .form-group select, 
 .form-group textarea {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 10px; /* Espaciado interior */
+  border: 1px solid #ddd; /* Borde gris claro */
+  border-radius: 4px; /* Bordes ligeramente redondeados */
+  font-size: 14px; /* Tamaño de fuente estándar */
 }
 
+/* Estilo específico para el campo de texto largo (textarea) */
 textarea {
-  resize: vertical;
-  height: 100px;
+  resize: vertical; /* Permite que el usuario ajuste la altura del textarea */
+  height: 100px; /* Altura inicial del campo de texto */
 }
 
+/* Estilos para el contenedor de las acciones del formulario (botones) */
 .form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  display: flex; /* Flexbox para alinear los botones */
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  gap: 10px; /* Espacio entre los botones */
 }
 
+/* Estilos del botón de confirmación (Enviar) */
 .btn-confirm {
-  background-color: #FFA500;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: #FFA500; /* Fondo de color naranja */
+  color: white; /* Texto blanco */
+  border: none; /* Sin borde */
+  padding: 10px 20px; /* Espaciado interior */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
 }
 
+/* Efecto hover para el botón de confirmación */
 .btn-confirm:hover {
-  background-color: #e69500;
+  background-color: #e69500; /* Naranja más oscuro al hacer hover */
 }
 
+/* Estilos del botón de cancelar */
 .btn-cancel {
-  background-color: #555555;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: #555555; /* Fondo gris oscuro */
+  color: white; /* Texto blanco */
+  border: none; /* Sin borde */
+  padding: 10px 20px; /* Espaciado interior */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
 }
 
+/* Efecto hover para el botón de cancelar */
 .btn-cancel:hover {
-  background-color: #444444;
+  background-color: #444444; /* Gris más oscuro al hacer hover */
 }
+
 
 /* ----------------------------------------------------- */
 /* Estilo general de la lista de productos */
+/* Contenedor de la lista de productos */
 .product-list {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 20px;
-  }
-  
-  .product-list h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .product-list p {
-    font-size: 14px;
-    color: #666;
-  }
-  
-  .table-controls {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  
-  .search-bar input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    margin-top: 15px;
-  }
-  
-  .btn-add-new {
-    background-color: #FFA500;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-  }
-  .btn-add-new a{
-    text-decoration: none;
-    color: white;
-  }
-  
-  .btn-add-new:hover {
-    background-color: #e69500;
-  }
-  
-  /* Estilo de la tabla */
-  .product-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  .product-table th,
-  .product-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
-  
-  .product-table th {
-    background-color: #f0f0f0;
-    font-weight: bold;
-  }
-  
-  .product-table tr:hover {
-    background-color: #f9f9f9;
-  }
-  
-  /* Estilo de los botones de acción */
-  .action-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    padding: 5px;
-  }
-  
-  .view-btn {
-    color: #007bff;
-  }
-  
-  .edit-btn {
-    color: #28a745;
-  }
-  
-  .delete-btn {
-    color: #dc3545;
-  }
-  
-  /* Paginación */
-  .pagination {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .page-info {
-    font-size: 14px;
-    color: #666;
-  }
-  
-  .pagination select {
-    padding: 5px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-  }
-  
-  
-/* Login Styles */
+  background-color: #f9f9f9; /* Fondo claro */
+  padding: 20px; /* Espaciado interior */
+  border-radius: 8px; /* Bordes redondeados */
+  margin-top: 20px; /* Espacio superior */
+}
+
+/* Título de la lista de productos */
+.product-list h2 {
+  font-size: 24px; /* Tamaño de fuente grande */
+  margin-bottom: 20px; /* Espacio debajo del título */
+}
+
+/* Descripción debajo del título */
+.product-list p {
+  font-size: 14px; /* Tamaño de fuente pequeño */
+  color: #666; /* Color gris */
+}
+
+/* Controles de la tabla, como la barra de búsqueda y botón de añadir */
+.table-controls {
+  display: flex; /* Alinea los elementos en una fila */
+  justify-content: space-between; /* Espacio entre la barra de búsqueda y el botón */
+  margin-bottom: 10px; /* Espacio inferior */
+}
+
+/* Estilo de la barra de búsqueda */
+.search-bar input {
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ddd; /* Borde gris claro */
+  border-radius: 4px; /* Bordes redondeados */
+  font-size: 14px; /* Tamaño de fuente estándar */
+  margin-top: 15px; /* Espacio superior */
+}
+
+/* Estilo del botón "Añadir nuevo" */
+.btn-add-new {
+  background-color: #FFA500; /* Naranja */
+  border: none; /* Sin borde */
+  padding: 10px 20px; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cursor cambia a puntero */
+  text-decoration: none; /* Sin subrayado en el enlace */
+}
+
+/* Estilo del enlace dentro del botón */
+.btn-add-new a {
+  text-decoration: none; /* Sin subrayado */
+  color: white; /* Texto blanco */
+}
+
+/* Efecto hover para el botón */
+.btn-add-new:hover {
+  background-color: #e69500; /* Naranja más oscuro */
+}
+
+/* Estilos de la tabla */
+.product-table {
+  width: 100%; /* Ancho completo */
+  border-collapse: collapse; /* Colapsa los bordes de las celdas */
+  margin-top: 10px; /* Espacio superior */
+}
+
+/* Estilos para las celdas de la tabla */
+.product-table th,
+.product-table td {
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ddd; /* Borde gris claro */
+  text-align: left; /* Texto alineado a la izquierda */
+}
+
+/* Estilos para los encabezados de la tabla */
+.product-table th {
+  background-color: #f0f0f0; /* Fondo gris claro */
+  font-weight: bold; /* Texto en negrita */
+}
+
+/* Estilo para resaltar la fila cuando el mouse está sobre ella */
+.product-table tr:hover {
+  background-color: #f9f9f9; /* Fondo más claro */
+}
+
+/* Estilos para los botones de acción (ver, editar, eliminar) */
+.action-btn {
+  background: none; /* Sin fondo */
+  border: none; /* Sin borde */
+  cursor: pointer; /* Cambia el cursor a puntero */
+  font-size: 18px; /* Tamaño de fuente grande */
+  padding: 5px; /* Espaciado interno */
+}
+
+/* Estilo del botón "Ver" */
+.view-btn {
+  color: #007bff; /* Azul */
+}
+
+/* Estilo del botón "Editar" */
+.edit-btn {
+  color: #28a745; /* Verde */
+}
+
+/* Estilo del botón "Eliminar" */
+.delete-btn {
+  color: #dc3545; /* Rojo */
+}
+
+/* Estilos para la paginación */
+.pagination {
+  display: flex; /* Flexbox para alinear los elementos */
+  justify-content: space-between; /* Espacio entre los elementos */
+  align-items: center; /* Alinea los elementos verticalmente */
+  margin-top: 10px; /* Espacio superior */
+}
+
+/* Información sobre la página actual */
+.page-info {
+  font-size: 14px; /* Tamaño de fuente pequeño */
+  color: #666; /* Color gris */
+}
+
+/* Selector de número de elementos por página */
+.pagination select {
+  padding: 5px; /* Espaciado interno */
+  border-radius: 4px; /* Bordes redondeados */
+  border: 1px solid #ddd; /* Borde gris claro */
+}
+
+/* Estilos de login */
+/* Contenedor general para la página de login */
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f9f9f9;
+  display: flex; /* Flexbox para centrar el formulario */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  min-height: 100vh; /* Altura mínima de toda la pantalla */
+  background-color: #f9f9f9; /* Fondo gris claro */
 }
 
+/* Caja que contiene el formulario de login */
 .login-box {
-  background-color: white;
-  border-radius: 10px;
-  padding: 40px;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  background-color: white; /* Fondo blanco */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 40px; /* Espaciado interior */
+  max-width: 500px; /* Ancho máximo */
+  width: 100%; /* Ancho completo */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Sombra para la caja */
+  text-align: center; /* Centra el texto dentro de la caja */
 }
 
+/* Logo dentro del formulario de login */
 .login-logo img {
-  width: 150px;
-  margin-bottom: 20px;
+  width: 150px; /* Ancho del logo */
+  margin-bottom: 20px; /* Espacio inferior */
 }
 
+/* Estilo del título del formulario de login */
 h2 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 24px; /* Tamaño de fuente grande */
+  font-weight: bold; /* Texto en negrita */
+  margin-bottom: 10px; /* Espacio inferior */
 }
 
+/* Estilo del texto descriptivo debajo del título */
 p {
-  color: #666;
-  margin-bottom: 20px;
+  color: #666; /* Color gris */
+  margin-bottom: 20px; /* Espacio inferior */
 }
 
+/* Estilo de los grupos de formularios */
 .form-group {
-  margin-bottom: 20px;
-  text-align: left;
+  margin-bottom: 20px; /* Espacio inferior entre los campos */
+  text-align: left; /* Alinea el texto a la izquierda */
 }
 
+/* Estilo de las etiquetas de los campos del formulario */
 .form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+  display: block; /* Bloque para tomar todo el ancho */
+  font-weight: bold; /* Texto en negrita */
+  margin-bottom: 5px; /* Espacio inferior */
 }
 
+/* Contenedor para íconos dentro de los campos */
 .input-wrapper {
-  position: relative;
+  position: relative; /* Para colocar íconos dentro de los campos */
 }
 
+/* Estilo de los campos de entrada */
 input {
-  width: 100%;
-  padding: 12px 40px 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
+  width: 100%; /* Ancho completo */
+  padding: 12px 40px 12px 15px; /* Espaciado interno, ajustado para íconos */
+  border: 1px solid #ddd; /* Borde gris claro */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 16px; /* Tamaño de fuente estándar */
 }
 
+/* Estilo de los íconos dentro de los campos */
 .input-icon {
-  position: absolute;
-  right: 10px;
-  top: 12px;
-  font-size: 18px;
-  cursor: pointer;
+  position: absolute; /* Posición absoluta dentro del input */
+  right: 10px; /* Alineado a la derecha */
+  top: 12px; /* Alineación vertical */
+  font-size: 18px; /* Tamaño de fuente */
+  cursor: pointer; /* Cambia el cursor a puntero */
 }
 
+/* Estilo para el enlace de "¿Olvidaste tu contraseña?" */
 .forgot-password {
-  text-align: right;
-  margin-bottom: 20px;
+  text-align: right; /* Alinea a la derecha */
+  margin-bottom: 20px; /* Espacio inferior */
 }
 
+/* Estilo del enlace de "¿Olvidaste tu contraseña?" */
 .forgot-link {
-  color: #FFA500;
-  text-decoration: none;
+  color: #FFA500; /* Naranja */
+  text-decoration: none; /* Sin subrayado */
 }
 
+/* Efecto hover para el enlace de "¿Olvidaste tu contraseña?" */
 .forgot-link:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Subraya al pasar el mouse */
 }
 
+/* Estilo del contenedor para los botones del formulario */
 .form-actions {
-  margin-top: 20px;
+  margin-top: 20px; /* Espacio superior */
 }
 
+/* Botón de login */
 .btn-login {
-  width: 100%;
-  padding: 12px;
-  background-color: #FFA500;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
+  width: 100%; /* Ancho completo */
+  padding: 12px; /* Espaciado interno */
+  background-color: #FFA500; /* Naranja */
+  color: white; /* Texto blanco */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 16px; /* Tamaño de fuente */
+  cursor: pointer; /* Cambia el cursor a puntero */
 }
 
+/* Efecto hover para el botón de login */
 .btn-login:hover {
-  background-color: #e69500;
+  background-color: #e69500; /* Naranja más oscuro */
 }
 
+/* Estilo del enlace para crear cuenta */
 .signup-link {
-  margin-top: 20px;
-  color: #666;
+  margin-top: 20px; /* Espacio superior */
+  color: #666; /* Color gris */
 }
 
+/* Estilo del enlace para crear cuenta */
 .signup-link a {
-  color: #FFA500;
-  text-decoration: none;
+  color: #FFA500; /* Naranja */
+  text-decoration: none; /* Sin subrayado */
 }
 
+/* Efecto hover para el enlace de crear cuenta */
 .signup-link a:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Subraya al pasar el mouse */
 }
+
 
 /* ----------------------------------------------------- */
-/* Login Styles */
+/* Contenedor principal para la página de login */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f9f9f9;
-  }
-  
-  .login-box {
-    background-color: white;
-    border-radius: 10px;
-    padding: 40px;
-    max-width: 500px;
-    width: 100%;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .login-logo img {
-    width: 150px;
-    margin-bottom: 20px;
-  }
-  
-  h2 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  p {
-    color: #666;
-    margin-bottom: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-    text-align: left;
-  }
-  
-  .form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .input-wrapper {
-    position: relative;
-  }
-  
-  input {
-    width: 100%;
-    padding: 12px 40px 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .input-icon {
-    position: absolute;
-    right: 10px;
-    top: 12px;
-    font-size: 18px;
-    cursor: pointer;
-  }
-  
-  .forgot-password {
-    text-align: right;
-    margin-bottom: 20px;
-  }
-  
-  .forgot-link {
-    color: #FFA500;
-    text-decoration: none;
-  }
-  
-  .forgot-link:hover {
-    text-decoration: underline;
-  }
-  
-  .form-actions {
-    margin-top: 20px;
-  }
-  
-  .btn-login {
-    width: 100%;
-    padding: 12px;
-    background-color: #FFA500;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  .btn-login a{
-    color: white;
-    text-decoration:none;
+  display: flex; /* Alinea el formulario en el centro de la pantalla */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  min-height: 100vh; /* Ocupa la altura completa de la ventana */
+  background-color: #f9f9f9; /* Fondo gris claro */
+}
 
-  }
-  
-  .btn-login:hover {
-    background-color: #e69500;
-  }
-  
-  .signup-link {
-    margin-top: 20px;
-    color: #666;
-  }
-  
-  .signup-link a {
-    color: #FFA500;
-    text-decoration: none;
-  }
-  
-  .signup-link a:hover {
-    text-decoration: underline;
-  }
+/* Caja que contiene el formulario de login */
+.login-box {
+  background-color: white; /* Fondo blanco */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 40px; /* Espaciado interno */
+  max-width: 500px; /* Ancho máximo */
+  width: 100%; /* Ancho completo */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Sombra ligera para dar profundidad */
+  text-align: center; /* Centra el texto dentro de la caja */
+}
+
+/* Estilo para el logo dentro del formulario de login */
+.login-logo img {
+  width: 150px; /* Ancho del logo */
+  margin-bottom: 20px; /* Espacio debajo del logo */
+}
+
+/* Título del formulario */
+h2 {
+  font-size: 24px; /* Tamaño grande para el título */
+  font-weight: bold; /* Texto en negrita */
+  margin-bottom: 10px; /* Espacio debajo del título */
+}
+
+/* Texto descriptivo */
+p {
+  color: #666; /* Color gris */
+  margin-bottom: 20px; /* Espacio debajo del texto */
+}
+
+/* Grupo de campos del formulario */
+.form-group {
+  margin-bottom: 20px; /* Espacio entre campos */
+  text-align: left; /* Alineación a la izquierda */
+}
+
+/* Estilo de las etiquetas de los campos */
+.form-group label {
+  display: block; /* Toma todo el ancho */
+  font-weight: bold; /* Texto en negrita */
+  margin-bottom: 5px; /* Espacio debajo de la etiqueta */
+}
+
+/* Contenedor para íconos dentro de los campos de entrada */
+.input-wrapper {
+  position: relative; /* Necesario para posicionar los íconos dentro de los campos */
+}
+
+/* Estilo de los campos de entrada */
+input {
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  padding: 12px 40px 12px 15px; /* Espaciado interno para íconos y texto */
+  border: 1px solid #ddd; /* Borde gris claro */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 16px; /* Tamaño de fuente estándar */
+}
+
+/* Íconos dentro de los campos de entrada */
+.input-icon {
+  position: absolute; /* Posición fija dentro del campo */
+  right: 10px; /* Alineado a la derecha */
+  top: 12px; /* Alineado verticalmente */
+  font-size: 18px; /* Tamaño del ícono */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+/* Estilo del enlace "¿Olvidaste tu contraseña?" */
+.forgot-password {
+  text-align: right; /* Alineado a la derecha */
+  margin-bottom: 20px; /* Espacio inferior */
+}
+
+/* Estilo del enlace de texto */
+.forgot-link {
+  color: #FFA500; /* Naranja */
+  text-decoration: none; /* Sin subrayado */
+}
+
+/* Efecto hover para el enlace */
+.forgot-link:hover {
+  text-decoration: underline; /* Agrega subrayado al pasar el mouse */
+}
+
+/* Contenedor para los botones del formulario */
+.form-actions {
+  margin-top: 20px; /* Espacio superior */
+}
+
+/* Botón de login */
+.btn-login {
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  padding: 12px; /* Espaciado interno */
+  background-color: #FFA500; /* Color de fondo naranja */
+  color: white; /* Texto blanco */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 16px; /* Tamaño de fuente estándar */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+/* Estilo del enlace dentro del botón de login */
+.btn-login a {
+  color: white; /* Texto blanco */
+  text-decoration: none; /* Sin subrayado */
+}
+
+/* Efecto hover para el botón de login */
+.btn-login:hover {
+  background-color: #e69500; /* Naranja más oscuro */
+}
+
+/* Estilo del enlace para el registro */
+.signup-link {
+  margin-top: 20px; /* Espacio superior */
+  color: #666; /* Color gris */
+}
+
+/* Estilo del enlace dentro del texto de registro */
+.signup-link a {
+  color: #FFA500; /* Naranja */
+  text-decoration: none; /* Sin subrayado */
+}
+
+/* Efecto hover para el enlace de registro */
+.signup-link a:hover {
+  text-decoration: underline; /* Subrayado al pasar el mouse */
+}
+
   

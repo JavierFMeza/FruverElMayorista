@@ -9,7 +9,7 @@ function ProductList() {
   const [isLargeText, setIsLargeText] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [openTopMenu, setOpenTopMenu] = useState(null);
-  const [products, setProducts] = useState([]); // Estado para almacenar los productos
+  const [inventory, setInventory] = useState([]); // Estado para almacenar el inventario
   const [loading, setLoading] = useState(true); // Estado para el loading
 
   // Efecto para manejar el modo oscuro
@@ -22,19 +22,19 @@ function ProductList() {
     toggleTextSize(isLargeText);
   }, [isLargeText]);
 
-  // Efecto para obtener productos desde el backend
+  // Efecto para obtener los datos del inventario desde el backend
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchInventory = async () => {
       try {
-        const response = await axios.get('http://localhost:3301/api/products'); // Ajusta esta URL a tu backend
-        setProducts(response.data); // Establecer productos desde la respuesta
+        const response = await axios.get('http://localhost:3301/api/inventario'); // Ajusta esta URL a tu backend
+        setInventory(response.data); // Establecer inventario desde la respuesta
         setLoading(false);
       } catch (error) {
-        console.error('Error al obtener productos:', error);
+        console.error('Error al obtener inventario:', error);
         setLoading(false);
       }
     };
-    fetchProducts();
+    fetchInventory();
   }, []);
 
   // Función para alternar el menú desplegable en la sidebar
@@ -64,9 +64,10 @@ function ProductList() {
             </a>
             {openDropdown === 'inventario' && (
               <ul className="dropdown-list">
-                <li><Link to="/productList">Lista de productos</Link></li>
-                <li><Link to="/productAdd">Añadir Producto</Link></li>
-                <li><Link to="/productMod">Modificar Producto</Link></li>
+              <li><Link to="/productList">Lista de productos</Link></li>
+              <li><Link to="/productMod">Modificar Producto</Link></li>
+              <li><Link to="/loteAdd">añadir Lote de producto</Link></li>
+              <li><Link to="/productAdd">Añadir Producto</Link></li>
               </ul>
             )}
           </li>
@@ -130,32 +131,34 @@ function ProductList() {
           </div>
         </div>
 
-        {/* Tabla de productos */}
+        {/* Tabla de inventario */}
         <div className="product-list">
-          <h2>Lista de productos</h2>
+          <h2>Lista de inventario</h2>
           <p>Gestiona tus productos</p>
 
           {loading ? (
-            <p>Cargando productos...</p>
+            <p>Cargando inventario...</p>
           ) : (
             <table className="product-table">
               <thead>
                 <tr>
-                  <th><input type="checkbox" /></th>
-                  <th>Nombre</th>
+                  <th>Código Lote</th>
+                  <th>Producto</th>
                   <th>Precio</th>
                   <th>Cantidad</th>
-                  <th>Fecha de Ingreso</th>
+                  <th>Fecha de Entrada</th>
+                  <th>Creado por</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => (
-                  <tr key={product.id}>
-                    <td><input type="checkbox" /></td>
-                    <td>{product.nombre}</td>
-                    <td>${product.precio}</td>
-                    <td>{product.cantidad}</td>
-                    <td>{product.fecha_ingreso}</td>
+                {inventory.map((item) => (
+                  <tr key={item.codigoLote}>
+                    <td>{item.codigoLote}</td>
+                    <td>{item.nombreProducto}</td>
+                    <td>${item.precioProducto}</td>
+                    <td>{item.cantidadLote}</td>
+                    <td>{new Date(item.fechaEntrada).toISOString().split('T')[0]}</td> {/* Formato YYYY-MM-DD */}
+                    <td>{item.nombreUsuario}</td>
                   </tr>
                 ))}
               </tbody>

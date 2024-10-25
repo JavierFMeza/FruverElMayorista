@@ -55,14 +55,16 @@ app.post('/api/register', (req, res) => {
 app.post('/api/login', (req, res) => {
   const { correo, contraseña } = req.body;
 
-  const sql = 'SELECT * FROM users WHERE correo = ? AND contraseña = ?';
+  const sql = 'SELECT nombre, correo FROM users WHERE correo = ? AND contraseña = ?';
   db.query(sql, [correo, contraseña], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al autenticar usuario.' });
     }
 
     if (results.length > 0) {
-      res.json({ success: true, message: 'Inicio de sesión exitoso.' });
+      // Si el usuario existe, devuelve el nombre del usuario junto con un mensaje de éxito
+      const { nombre } = results[0];
+      res.json({ success: true, message: 'Inicio de sesión exitoso.', nombre });
     } else {
       res.json({ success: false, message: 'Correo o contraseña incorrectos.' });
     }

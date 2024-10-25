@@ -1,32 +1,50 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Importamos Link para redirección
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { toggleDarkMode, toggleTextSize } from '../utils/utils';
 import '../styles.css';
 
 function ProductAdd() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLargeText, setIsLargeText] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // Controla cuál menú desplegable está abierto en la sidebar
-  const [openTopMenu, setOpenTopMenu] = useState(null); // Controla cuál menú desplegable está abierto en la top navbar
+  const [openDropdown, setOpenDropdown] = useState(null); 
+  const [openTopMenu, setOpenTopMenu] = useState(null);
 
-  // Efecto para manejar el modo oscuro en el body
+  const [nombre, setNombre] = useState('');
+  const [precio, setPrecio] = useState('');
+  const [diasParaVencimiento, setDiasParaVencimiento] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3301/api/products', {
+        nombre,
+        precio,
+        diasParaVencimiento,
+      });
+      console.log('Producto añadido:', response.data);
+      alert('Producto añadido exitosamente.');
+    } catch (error) {
+      console.error('Error al añadir producto:', error);
+      alert('Error al añadir el producto.');
+    }
+  };
+
+  // Funciones para alternar el modo oscuro y el tamaño de texto
   React.useEffect(() => {
     toggleDarkMode(isDarkMode);
   }, [isDarkMode]);
 
-  // Efecto para manejar el tamaño del texto en el body
   React.useEffect(() => {
     toggleTextSize(isLargeText);
   }, [isLargeText]);
 
-  // Función para alternar la visibilidad del menú desplegable en la sidebar
   const toggleDropdown = (menu) => {
-    setOpenDropdown(openDropdown === menu ? null : menu); // Cierra el menú abierto o abre el nuevo
+    setOpenDropdown(openDropdown === menu ? null : menu);
   };
 
-  // Función para alternar la visibilidad del menú desplegable en la top navbar
   const toggleTopMenu = (menu) => {
-    setOpenTopMenu(openTopMenu === menu ? null : menu); // Cierra el menú abierto o abre el nuevo en la top navbar
+    setOpenTopMenu(openTopMenu === menu ? null : menu);
   };
 
   return (
@@ -46,9 +64,10 @@ function ProductAdd() {
             </a>
             {openDropdown === 'inventario' && (
               <ul className="dropdown-list">
-                <li><Link to="/productList">Lista de productos</Link></li>
-                <li><Link to="/productAdd">Añadir Producto</Link></li>
-                <li><Link to="/productMod">Modificar Producto</Link></li>
+              <li><Link to="/productList">Lista de productos</Link></li>
+              <li><Link to="/productMod">Modificar Producto</Link></li>
+              <li><Link to="/loteAdd">añadir Lote de producto</Link></li>
+              <li><Link to="/productAdd">Añadir Producto</Link></li>
               </ul>
             )}
           </li>
@@ -71,8 +90,8 @@ function ProductAdd() {
       <div className="main-content">
         {/* Top Navbar */}
         <div className="top-navbar">
+          {/* Accessibility Icon */}
           <div className="nav-icons">
-            {/* Accessibility Icon */}
             <div className="nav-item" id="accessibility">
               <i className="icon" onClick={() => toggleTopMenu('accessibility')}>&#9881;</i>
               {openTopMenu === 'accessibility' && (
@@ -83,9 +102,9 @@ function ProductAdd() {
                   </ul>
                 </div>
               )}
-            </div>
 
             {/* Notification Icon */}
+            </div>
             <div className="nav-item" id="notification">
               <i className="icon" onClick={() => toggleTopMenu('notification')}>&#128276;</i>
               {openTopMenu === 'notification' && (
@@ -95,9 +114,8 @@ function ProductAdd() {
                   </ul>
                 </div>
               )}
-            </div>
-
             {/* User Icon */}
+            </div>
             <div className="nav-item" id="user">
               <i className="icon" onClick={() => toggleTopMenu('user')}>&#128100;</i>
               {openTopMenu === 'user' && (
@@ -112,56 +130,45 @@ function ProductAdd() {
           </div>
         </div>
 
-        {/* Aquí agregamos el formulario para añadir productos */}
         <div className="product-add-form">
           <h2>Añadir nuevo producto</h2>
           <p>Crear nuevo producto</p>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="productName">Nombre del producto</label>
-                <input type="text" id="productName" name="productName" placeholder="Nombre del producto" />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="productUnit">Unidad</label>
-                <select id="productUnit" name="productUnit">
-                  <option value="">Escoja unidad</option>
-                  <option value="kilogram">Kilogramo</option>
-                  <option value="liter">Litro</option>
-                  <option value="unit">Unidad</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="productCode">Código</label>
-                <input type="text" id="productCode" name="productCode" placeholder="Código" />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="productQuantity">Cantidad</label>
-                <input type="number" id="productQuantity" name="productQuantity" placeholder="Cantidad" />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="productDescription">Descripción</label>
-              <textarea id="productDescription" name="productDescription" placeholder="Descripción"></textarea>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="productDiscount">Descuento</label>
-                <select id="productDiscountType" name="productDiscountType">
-                  <option value="percentage">Porcentaje</option>
-                  <option value="fixed">Fijo</option>
-                </select>
-                <input type="text" id="productDiscount" name="productDiscount" placeholder="Porcentaje" />
+                <input 
+                  type="text" 
+                  id="productName" 
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)} 
+                  placeholder="Nombre del producto" 
+                  required 
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="productPrice">Precio</label>
-                <input type="text" id="productPrice" name="productPrice" placeholder="Precio" />
+                <input 
+                  type="number" 
+                  id="productPrice" 
+                  value={precio}
+                  onChange={(e) => setPrecio(e.target.value)} 
+                  placeholder="Precio" 
+                  required 
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="productExpiry">Días para vencimiento</label>
+                <input 
+                  type="number" 
+                  id="productExpiry" 
+                  value={diasParaVencimiento}
+                  onChange={(e) => setDiasParaVencimiento(e.target.value)} 
+                  placeholder="Días para vencimiento" 
+                  required 
+                />
               </div>
             </div>
 
@@ -173,7 +180,6 @@ function ProductAdd() {
         </div>
       </div>
 
-      {/* Footer */}
       <footer>
         <p>&copy; 2024 Fruver. Todos los derechos reservados.</p>
         <ul>
@@ -187,4 +193,3 @@ function ProductAdd() {
 }
 
 export default ProductAdd;
-    

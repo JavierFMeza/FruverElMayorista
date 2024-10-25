@@ -12,6 +12,7 @@ import ProductList from './pages/productList';
 import ProductMod from './pages/productMod';
 import Rights from './pages/rights';
 import UserProfile from './pages/userProfile';
+import LoteAdd from './pages/loteAdd';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/productMod" element={<ProductMod />} />
         <Route path="/rights" element={<Rights />} />
         <Route path="/userProfile" element={<UserProfile />} />
+        <Route path="/loteAdd" element={<LoteAdd />} />
       </Routes>
     </Router>
   );
