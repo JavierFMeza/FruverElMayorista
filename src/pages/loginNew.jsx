@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Importa Axios para hacer solicitudes HTTP
 import { Link } from 'react-router-dom';
 import '../styles.css';
 
@@ -8,12 +9,27 @@ function LoginNew() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Lógica de creación de cuenta
-    console.log('Nombre Completo:', fullName);
-    console.log('Email:', email);
-    console.log('Password:', password);
+
+    try {
+      const response = await axios.post('http://localhost:3302/api/register', {
+        nombre: fullName,
+        correo: email,
+        contraseña: password,
+      });
+
+      if (response.data.success) {
+        alert('Registro exitoso, ahora puedes iniciar sesión.');
+        // Aquí podrías redirigir al usuario a la página de login, por ejemplo:
+        // history.push('/login');
+      } else {
+        alert('Hubo un error en el registro: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('Error al registrar usuario:', error);
+      alert('Hubo un error al registrar el usuario. Intenta nuevamente.');
+    }
   };
 
   return (
@@ -21,7 +37,7 @@ function LoginNew() {
       <div className="login-box">
         {/* Logo */}
         <div className="login-logo">
-            <img src="https://www.esencialcostarica.com/wp-content/uploads/2023/10/Fruver-logotipo-001-1024x791.jpg" alt="Fruver Logo" />
+          <img src="https://www.esencialcostarica.com/wp-content/uploads/2023/10/Fruver-logotipo-001-1024x791.jpg" alt="Fruver Logo" />
         </div>
 
         {/* Título */}

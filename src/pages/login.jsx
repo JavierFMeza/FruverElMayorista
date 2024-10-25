@@ -1,17 +1,35 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Importamos axios para conectar con el backend
 import '../styles.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(''); // Estado para mostrar errores
+  const navigate = useNavigate(); // Para redirigir al usuario
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Lógica de autenticación
-    console.log('Email:', email);
-    console.log('Password:', password);
+
+    try {
+      const response = await axios.post('http://localhost:3302/api/login', {
+        correo: email,
+        contraseña: password,
+      });
+
+      if (response.data.success) {
+        // Redirigir a la página principal si el login es exitoso
+        navigate('/');
+      } else {
+        // Mostrar mensaje de error si el login falla
+        setErrorMessage(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error al intentar iniciar sesión:', error);
+      setErrorMessage('Hubo un error en el servidor.');
+    }
   };
 
   return (
@@ -19,12 +37,15 @@ function Login() {
       <div className="login-box">
         {/* Logo */}
         <div className="login-logo">
-            <img src="https://www.esencialcostarica.com/wp-content/uploads/2023/10/Fruver-logotipo-001-1024x791.jpg" alt="Fruver Logo" />
+          <img
+            src="https://www.esencialcostarica.com/wp-content/uploads/2023/10/Fruver-logotipo-001-1024x791.jpg"
+            alt="Fruver Logo"
+          />
         </div>
 
         {/* Título */}
         <h2>Ingresar</h2>
-        <p>Porfavor ingresar con su cuenta</p>
+        <p>Por favor ingresar con su cuenta</p>
 
         {/* Formulario */}
         <form onSubmit={handleLogin}>
@@ -36,7 +57,7 @@ function Login() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Igresa tu correo"
+                placeholder="Ingresa tu correo"
                 required
               />
               <span className="input-icon">✉️</span>
@@ -63,22 +84,25 @@ function Login() {
             </div>
           </div>
 
+          {/* Mostrar error en caso de fallo en el login */}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+
           {/* Link de "¿Olvidaste tu contraseña?" */}
           <div className="forgot-password">
             <Link to="/forgot-password" className="forgot-link">
-              olvidaste tu contraseña?
+              ¿Olvidaste tu contraseña?
             </Link>
           </div>
 
           {/* Botón de login */}
           <div className="form-actions">
-            <button type="submit" className="btn-login"><Link to="/">Ingresar</Link></button>
+            <button type="submit" className="btn-login">Ingresar</button>
           </div>
         </form>
 
         {/* Link para registrarse */}
         <div className="signup-link">
-          No tienes cuenta? <Link to="/loginNew">Registrate</Link>
+          No tienes cuenta? <Link to="/loginNew">Regístrate</Link>
         </div>
       </div>
     </div>
