@@ -66,7 +66,7 @@ function ProductAdd() {
               <ul className="dropdown-list">
               <li><Link to="/productList">Lista de productos</Link></li>
               <li><Link to="/productMod">Modificar Producto</Link></li>
-              <li><Link to="/loteAdd">añadir Lote de producto</Link></li>
+              <li><Link to="/loteAdd">Añadir Lote de producto</Link></li>
               <li><Link to="/productAdd">Añadir Producto</Link></li>
               </ul>
             )}
