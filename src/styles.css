@@ -423,13 +423,13 @@ body.dark-mode .dropdown-list li::before {
 }
 
   
-/* ----------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------------------------------------------- */
 /* Estilos generales del formulario de agregar producto */
 .product-add-form {
   background-color: #f9f9f9; /* Fondo gris claro */
-  padding: 20px; /* Espaciado interior */
   border-radius: 8px; /* Bordes redondeados */
   margin-top: 20px; /* Espacio superior */
+  padding: 40px; /* Espaciado interior */
 }
 
 /* Estilo para el título del formulario */
@@ -521,13 +521,107 @@ textarea {
   background-color: #444444; /* Gris más oscuro al hacer hover */
 }
 
+/* Modo oscuro para el formulario de agregar producto */
+body.dark-mode .product-add-form {
+  background-color: #000000; /* Fondo negro */
+  color: #ffffff; /* Texto blanco */
+}
 
-/* ----------------------------------------------------- */
+/* Modo oscuro para el título del formulario */
+body.dark-mode .product-add-form h2 {
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para el párrafo de descripción */
+body.dark-mode .product-add-form p {
+  color: #cccccc; /* Texto gris claro */
+}
+
+/* Modo oscuro para las etiquetas de los campos */
+body.dark-mode .form-group label {
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para inputs, selects y textareas */
+body.dark-mode .form-group input, 
+body.dark-mode .form-group select, 
+body.dark-mode .form-group textarea {
+  background-color: #333333; /* Fondo gris oscuro */
+  border: 1px solid #555555; /* Borde gris más oscuro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para el textarea */
+body.dark-mode textarea {
+  background-color: #333333; /* Fondo gris oscuro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para el botón de confirmación (Enviar) */
+body.dark-mode .btn-confirm {
+  background-color: #FFA500; /* Fondo de color naranja (sin cambios) */
+  color: white; /* Texto blanco */
+}
+
+body.dark-mode .btn-confirm:hover {
+  background-color: #e69500; /* Naranja más oscuro al hacer hover */
+}
+
+/* Modo oscuro para el botón de cancelar */
+body.dark-mode .btn-cancel {
+  background-color: #444444; /* Fondo gris oscuro */
+  color: white; /* Texto blanco */
+}
+
+body.dark-mode .btn-cancel:hover {
+  background-color: #333333; /* Gris más oscuro al hacer hover */
+}
+/* ------------------------------------------------------------------------------------------------------------------------------------------ */
+/* Estilos generales del formulario de agregar lote */
+.lote-add-form {
+  background-color: #f9f9f9; /* Fondo gris claro */
+  border-radius: 8px; /* Bordes redondeados */
+  margin-top: 20px; /* Espacio superior */
+  padding: 40px; /* Espaciado interior */
+}
+
+/* Estilo para el título del formulario */
+.lote-add-form h2 {
+  margin-top: 40px; /* Margen superior amplio */
+  font-size: 24px; /* Tamaño de fuente grande */
+  margin-bottom: 30px; /* Margen inferior amplio */
+}
+
+/* Estilo para el párrafo de descripción */
+.lote-add-form p {
+  font-size: 14px; /* Tamaño de fuente más pequeño */
+  color: #666; /* Color gris claro para el texto */
+  margin-top: 10px; /* Margen superior pequeño */
+  margin-bottom: 20px; /* Margen inferior */
+}
+
+/* Modo oscuro para el formulario de agregar lote */
+body.dark-mode .lote-add-form {
+  background-color: #000000; /* Fondo negro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para el título del formulario */
+body.dark-mode .lote-add-form h2 {
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para el párrafo de descripción */
+body.dark-mode .lote-add-form p {
+  color: #cccccc; /* Texto gris claro */
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------ */
 /* Estilo general de la lista de productos */
 /* Contenedor de la lista de productos */
 .product-list {
   background-color: #f9f9f9; /* Fondo claro */
-  padding: 20px; /* Espaciado interior */
+  padding: 40px; /* Espaciado interior */
   border-radius: 8px; /* Bordes redondeados */
   margin-top: 20px; /* Espacio superior */
 }
@@ -652,6 +746,104 @@ textarea {
   border: 1px solid #ddd; /* Borde gris claro */
 }
 
+/* Modo oscuro para el contenedor de la lista de productos */
+body.dark-mode .product-list {
+  background-color: #000000; /* Fondo negro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para el título de la lista de productos */
+body.dark-mode .product-list h2 {
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para la descripción debajo del título */
+body.dark-mode .product-list p {
+  color: #cccccc; /* Texto gris claro */
+}
+
+/* Modo oscuro para los controles de la tabla */
+body.dark-mode .table-controls {
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para la barra de búsqueda */
+body.dark-mode .search-bar input {
+  background-color: #333333; /* Fondo gris oscuro */
+  border: 1px solid #555555; /* Borde gris oscuro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para el botón "Añadir nuevo" */
+body.dark-mode .btn-add-new {
+  background-color: #FFA500; /* Naranja */
+  color: white; /* Texto blanco */
+}
+
+body.dark-mode .btn-add-new:hover {
+  background-color: #e69500; /* Naranja más oscuro */
+}
+
+/* Modo oscuro para la tabla de productos */
+body.dark-mode .product-table {
+  background-color: #000000; /* Fondo negro */
+  color: #ffffff; /* Texto blanco */
+}
+
+body.dark-mode .product-table th,
+body.dark-mode .product-table td {
+  background-color: #000000; /* Fondo negro para las celdas */
+  border: 1px solid #ffffff; /* Bordes blancos */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para los encabezados de la tabla */
+body.dark-mode .product-table th {
+  background-color: #333333; /* Fondo gris oscuro */
+  font-weight: bold; /* Texto en negrita */
+}
+
+/* Modo oscuro para resaltar la fila cuando el mouse está sobre ella */
+body.dark-mode .product-table tr:hover {
+  background-color: #555555; /* Fondo gris claro */
+}
+
+/* Modo oscuro para los botones de acción (ver, editar, eliminar) */
+body.dark-mode .action-btn {
+  color: #ffffff; /* Texto blanco */
+}
+
+body.dark-mode .view-btn {
+  color: #007bff; /* Azul para el botón "Ver" */
+}
+
+body.dark-mode .edit-btn {
+  color: #28a745; /* Verde para el botón "Editar" */
+}
+
+body.dark-mode .delete-btn {
+  color: #dc3545; /* Rojo para el botón "Eliminar" */
+}
+
+/* Modo oscuro para la paginación */
+body.dark-mode .pagination {
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para la información sobre la página actual */
+body.dark-mode .page-info {
+  color: #cccccc; /* Texto gris claro */
+}
+
+/* Modo oscuro para el selector de número de elementos por página */
+body.dark-mode .pagination select {
+  background-color: #333333; /* Fondo gris oscuro */
+  color: #ffffff; /* Texto blanco */
+  border: 1px solid #555555; /* Borde gris oscuro */
+}
+
+
+/* --------------------------------------------------------------------------------------------------------------------------- */
 /* Estilos de login */
 /* Contenedor general para la página de login */
 .login-container {
@@ -785,7 +977,7 @@ input {
 }
 
 
-/* ----------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------------------------------------------------- */
 /* Contenedor principal para la página de login */
 .login-container {
   display: flex; /* Alinea el formulario en el centro de la pantalla */
