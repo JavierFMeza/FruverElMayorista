@@ -1,32 +1,51 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Importamos Link para redirección
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { toggleDarkMode, toggleTextSize } from '../utils/utils';
 import '../styles.css';
 
 function ProductExpire() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLargeText, setIsLargeText] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // Controla cuál menú desplegable está abierto en la sidebar
-  const [openTopMenu, setOpenTopMenu] = useState(null); // Controla cuál menú desplegable está abierto en la top navbar
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openTopMenu, setOpenTopMenu] = useState(null);
+  const [expiringProducts, setExpiringProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  
 
-  // Efecto para manejar el modo oscuro en el body
-  React.useEffect(() => {
+  useEffect(() => {
     toggleDarkMode(isDarkMode);
   }, [isDarkMode]);
 
-  // Efecto para manejar el tamaño del texto en el body
-  React.useEffect(() => {
+  useEffect(() => {
     toggleTextSize(isLargeText);
   }, [isLargeText]);
 
-  // Función para alternar la visibilidad del menú desplegable en la sidebar
+  // Esta función llama a la API para obtener productos con exactamente 3 días para vencerse
+  useEffect(() => {
+    const fetchExpiringProducts = async () => {
+      setLoading(true); // Muestra el indicador de carga mientras se obtienen los datos.
+      try {
+        const response = await axios.get('http://localhost:3301/api/productos/por_vencer', {
+          params: { search: searchTerm },
+        });
+        setExpiringProducts(response.data);
+      } catch (error) {
+        console.error('Error al obtener productos por vencer en 3 días:', error);
+      } finally {
+        setLoading(false); // Oculta el indicador de carga cuando los datos se han cargado.
+      }
+    };
+    fetchExpiringProducts();
+  }, [searchTerm]);
+
   const toggleDropdown = (menu) => {
-    setOpenDropdown(openDropdown === menu ? null : menu); // Cierra el menú abierto o abre el nuevo
+    setOpenDropdown(openDropdown === menu ? null : menu);
   };
 
-  // Función para alternar la visibilidad del menú desplegable en la top navbar
   const toggleTopMenu = (menu) => {
-    setOpenTopMenu(openTopMenu === menu ? null : menu); // Cierra el menú abierto o abre el nuevo en la top navbar
+    setOpenTopMenu(openTopMenu === menu ? null : menu);
   };
 
   return (
@@ -46,10 +65,10 @@ function ProductExpire() {
             </a>
             {openDropdown === 'inventario' && (
               <ul className="dropdown-list">
-              <li><Link to="/productList">Lista de productos</Link></li>
-              <li><Link to="/productMod">Modificar Producto</Link></li>
-              <li><Link to="/loteAdd">Añadir Lote de producto</Link></li>
-              <li><Link to="/productAdd">Añadir Producto</Link></li>
+                <li><Link to="/productList">Lista de Lotes de productos</Link></li>
+                <li><Link to="/productMod">Modificar Lotes de productos</Link></li>
+                <li><Link to="/loteAdd">Añadir Lote de producto</Link></li>
+                <li><Link to="/productAdd">Añadir Producto</Link></li>
               </ul>
             )}
           </li>
@@ -59,9 +78,9 @@ function ProductExpire() {
             </a>
             {openDropdown === 'reportes' && (
               <ul className="dropdown-list">
-                <li><Link to="/productExpire">Productos por vencer</Link></li>
-                <li><Link to="/productFinish">Productos por acabarse</Link></li>
-                <li><Link to="/productBest">Productos más vendidos</Link></li>
+                <li><Link to="/productExpire">Lotes de productos por vencer</Link></li>
+                <li><Link to="/productFinish">Lotes de productos por acabarse</Link></li>
+                <li><Link to="/productExpired">Lotes de productos ya expirados</Link></li>
               </ul>
             )}
           </li>
@@ -113,124 +132,51 @@ function ProductExpire() {
           </div>
         </div>
 
-        {/* Aquí se genera la tabla de modificar productos */}
-        <div className="product-list">
-          <h2>Lista de productos por expirar</h2>
-          <p>lista de tus productos</p>
+        {/* Tabla de productos por vencer en 3 días */}
+        <div className="product-expire-list">
+          <h2>Productos Próximos a Vencer en 3 Días</h2>
+          <p>Lista de productos que están a 3 días de vencerse.</p>
 
-          <div className="table-controls">
-            <div className="search-bar">
-              <input type="text" placeholder="Search..." />
-            </div>
-            <button className="btn-add-new"><Link to="/productAdd">Añadir Producto</Link></button>
-          </div>
+          {/* Barra de búsqueda */}
+          <input
+            type="text"
+            placeholder="Buscar producto..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
 
-          <table className="product-table">
-            <thead>
-              <tr>
-                <th><input type="checkbox" /></th>
-                <th>Nombre</th>
-                <th>No</th>
-                <th>Precio</th>
-                <th>Unidades</th>
-                <th>Creado por</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>Manzanas</td>
-                <td>PT001</td>
-                <td>$900</td>
-                <td>100</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Peras</td>
-                <td>PT002</td>
-                <td>$1200</td>
-                <td>150</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Lechuga</td>
-                <td>PT003</td>
-                <td>$750</td>
-                <td>200</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Zanahorias</td>
-                <td>PT004</td>
-                <td>$650</td>
-                <td>300</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Tomates</td>
-                <td>PT005</td>
-                <td>$800</td>
-                <td>250</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>Aguacates</td>
-                <td>PT006</td>
-                <td>$1700</td>
-                <td>40</td>
-                <td>Admin</td>
-                <td>
-                  <button className="action-btn view-btn">👁️</button>
-                  <button className="action-btn edit-btn">✏️</button>
-                  <button className="action-btn delete-btn">🗑️</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div className="pagination">
-            <span>Show per page:</span>
-            <select>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-            </select>
-
-            <div className="page-info">
-              <span>1 - 7 of 7 items</span>
-            </div>
-          </div>
+          {loading ? (
+            <p>Cargando...</p>
+          ) : expiringProducts.length === 0 ? (
+            <div className="no-expiring-products-message">No hay productos próximos a vencer en 3 días.</div>
+          ) : (
+            <table className="product-expire-table">
+              <thead>
+                <tr>
+                  <th>Código Lote</th>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Fecha de Entrada</th>
+                  <th>Creado por</th>
+                  <th>Días Restantes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {expiringProducts.map((item) => (
+                  <tr key={item.codigoLote}>
+                    <td>{item.codigoLote}</td>
+                    <td>{item.nombreProducto}</td>
+                    <td>${item.precioProducto}</td>
+                    <td>{item.cantidadLote}</td>
+                    <td>{new Date(item.fechaEntrada).toISOString().split('T')[0]}</td>
+                    <td>{item.nombreUsuario}</td>
+                    <td>{item.diasRestantes}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 

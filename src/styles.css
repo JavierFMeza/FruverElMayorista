@@ -208,8 +208,8 @@ body {
   display: block; /* Hace visible el submenu */
 }
 
-/* Sección de encabezados y contenido (ej: tablas de productos expirados) */
-.header, .expired-products {
+/* Sección de encabezados y contenido para las tablas de la página de inicio */
+.recent-products, .recent-lotes, .expired-products {
   background-color: #f1f3f5; /* Fondo gris claro */
   padding: 20px; /* Espaciado interior */
   margin-bottom: 20px; /* Margen inferior para separación entre secciones */
@@ -217,10 +217,11 @@ body {
   border: 1px solid rgb(194, 194, 194); /* Borde gris claro */
 }
 
-/* Encabezados */
-h2 {
-  margin-bottom: 20px; /* Margen inferior para separación del contenido */
+/* Encabezados de las secciones */
+.recent-products h3, .recent-lotes h3, .expired-products h3 {
   font-size: 20px; /* Tamaño de fuente */
+  margin-bottom: 10px; /* Margen inferior para separar del contenido */
+  color: #333; /* Color de texto */
 }
 
 /* Tablas */
@@ -234,17 +235,22 @@ table th, table td {
   padding: 10px; /* Espaciado interior de cada celda */
   border: 1px solid #ccc; /* Bordes de las celdas en gris claro */
   text-align: left; /* Alineación del texto a la izquierda */
+  font-size: 14px; /* Tamaño de fuente */
+  color: #555; /* Color del texto */
 }
 
 /* Encabezados de las tablas */
 table th {
   background-color: #f0f0f0; /* Fondo gris claro para los encabezados */
+  font-weight: bold; /* Negrita para los encabezados */
+  color: #333; /* Color del texto de los encabezados */
 }
 
 /* Cambio de fondo al pasar el mouse sobre una fila de la tabla */
 table tbody tr:hover {
   background-color: #f9f9f9; /* Fondo ligeramente más claro */
 }
+
 
 /* Estilos para el pie de página (Footer) */
 footer {
@@ -307,6 +313,18 @@ body.dark-mode .top-navbar {
   background-color: #333333; /* Fondo gris oscuro para la barra de navegación superior */
 }
 
+/* Modo oscuro para las secciones */
+body.dark-mode .recent-products, body.dark-mode .recent-lotes, body.dark-mode .expired-products {
+  background-color: #333; /* Fondo oscuro */
+  border: 1px solid #555; /* Borde gris oscuro */
+  color: #ddd; /* Color de texto claro */
+}
+
+/* Modo oscuro para los encabezados de las secciones */
+body.dark-mode .recent-products h3, body.dark-mode .recent-lotes h3, body.dark-mode .expired-products h3 {
+  color: #fff; /* Texto blanco */
+}
+
 /* Modo oscuro para tablas */
 body.dark-mode table th, 
 body.dark-mode table td {
@@ -315,17 +333,23 @@ body.dark-mode table td {
   color: #ffffff; /* Texto blanco dentro de las celdas */
 }
 
-body.dark-mode .header, 
+/* Modo oscuro para las secciones de productos recientes, lotes recientes y productos expirados */
+body.dark-mode .recent-products, 
+body.dark-mode .recent-lotes, 
 body.dark-mode .expired-products {
-  background-color: #000000; /* Fondo negro para las secciones de encabezados y productos expirados */
+  background-color: #000000; /* Fondo negro para las secciones */
   border: 1px solid #ffffff; /* Bordes blancos alrededor de estas secciones */
   color: #ffffff; /* Texto blanco dentro de estas secciones */
 }
 
-body.dark-mode table th {
+/* Modo oscuro para encabezados de las tablas en cada sección */
+body.dark-mode .recent-products table th,
+body.dark-mode .recent-lotes table th,
+body.dark-mode .expired-products table th {
   background-color: #333333; /* Fondo gris oscuro para los encabezados de las tablas */
 }
 
+/* Efecto hover en modo oscuro para filas de la tabla */
 body.dark-mode table tbody tr:hover {
   background-color: #555555; /* Fondo gris más claro al pasar el mouse sobre una fila */
 }
@@ -638,12 +662,6 @@ body.dark-mode .lote-add-form p {
   color: #666; /* Color gris */
 }
 
-/* Controles de la tabla, como la barra de búsqueda y botón de añadir */
-.table-controls {
-  display: flex; /* Alinea los elementos en una fila */
-  justify-content: space-between; /* Espacio entre la barra de búsqueda y el botón */
-  margin-bottom: 10px; /* Espacio inferior */
-}
 
 /* Estilo de la barra de búsqueda */
 .search-bar input {
@@ -654,26 +672,6 @@ body.dark-mode .lote-add-form p {
   margin-top: 15px; /* Espacio superior */
 }
 
-/* Estilo del botón "Añadir nuevo" */
-.btn-add-new {
-  background-color: #FFA500; /* Naranja */
-  border: none; /* Sin borde */
-  padding: 10px 20px; /* Espaciado interno */
-  border-radius: 5px; /* Bordes redondeados */
-  cursor: pointer; /* Cursor cambia a puntero */
-  text-decoration: none; /* Sin subrayado en el enlace */
-}
-
-/* Estilo del enlace dentro del botón */
-.btn-add-new a {
-  text-decoration: none; /* Sin subrayado */
-  color: white; /* Texto blanco */
-}
-
-/* Efecto hover para el botón */
-.btn-add-new:hover {
-  background-color: #e69500; /* Naranja más oscuro */
-}
 
 /* Estilos de la tabla */
 .product-table {
@@ -699,30 +697,6 @@ body.dark-mode .lote-add-form p {
 /* Estilo para resaltar la fila cuando el mouse está sobre ella */
 .product-table tr:hover {
   background-color: #f9f9f9; /* Fondo más claro */
-}
-
-/* Estilos para los botones de acción (ver, editar, eliminar) */
-.action-btn {
-  background: none; /* Sin fondo */
-  border: none; /* Sin borde */
-  cursor: pointer; /* Cambia el cursor a puntero */
-  font-size: 18px; /* Tamaño de fuente grande */
-  padding: 5px; /* Espaciado interno */
-}
-
-/* Estilo del botón "Ver" */
-.view-btn {
-  color: #007bff; /* Azul */
-}
-
-/* Estilo del botón "Editar" */
-.edit-btn {
-  color: #28a745; /* Verde */
-}
-
-/* Estilo del botón "Eliminar" */
-.delete-btn {
-  color: #dc3545; /* Rojo */
 }
 
 /* Estilos para la paginación */
@@ -774,15 +748,6 @@ body.dark-mode .search-bar input {
   color: #ffffff; /* Texto blanco */
 }
 
-/* Modo oscuro para el botón "Añadir nuevo" */
-body.dark-mode .btn-add-new {
-  background-color: #FFA500; /* Naranja */
-  color: white; /* Texto blanco */
-}
-
-body.dark-mode .btn-add-new:hover {
-  background-color: #e69500; /* Naranja más oscuro */
-}
 
 /* Modo oscuro para la tabla de productos */
 body.dark-mode .product-table {
@@ -808,22 +773,6 @@ body.dark-mode .product-table tr:hover {
   background-color: #555555; /* Fondo gris claro */
 }
 
-/* Modo oscuro para los botones de acción (ver, editar, eliminar) */
-body.dark-mode .action-btn {
-  color: #ffffff; /* Texto blanco */
-}
-
-body.dark-mode .view-btn {
-  color: #007bff; /* Azul para el botón "Ver" */
-}
-
-body.dark-mode .edit-btn {
-  color: #28a745; /* Verde para el botón "Editar" */
-}
-
-body.dark-mode .delete-btn {
-  color: #dc3545; /* Rojo para el botón "Eliminar" */
-}
 
 /* Modo oscuro para la paginación */
 body.dark-mode .pagination {
@@ -834,14 +783,360 @@ body.dark-mode .pagination {
 body.dark-mode .page-info {
   color: #cccccc; /* Texto gris claro */
 }
-
-/* Modo oscuro para el selector de número de elementos por página */
-body.dark-mode .pagination select {
-  background-color: #333333; /* Fondo gris oscuro */
-  color: #ffffff; /* Texto blanco */
-  border: 1px solid #555555; /* Borde gris oscuro */
+/* ------------------------------------------------------------------------------------------------------------------------------------------ */
+/* Estilo general para productos por vencer */
+/* Contenedor de productos por vencer */
+.product-expire-list {
+  background-color: #f9f9f9; /* Fondo claro */
+  padding: 40px; /* Espaciado interior */
+  border-radius: 8px; /* Bordes redondeados */
+  margin-top: 20px; /* Espacio superior */
 }
 
+/* Título de la lista de productos por vencer */
+.product-expire-list h2 {
+  font-size: 24px; /* Tamaño de fuente grande */
+  margin-bottom: 20px; /* Espacio debajo del título */
+}
+
+/* Descripción debajo del título */
+.product-expire-list p {
+  font-size: 14px; /* Tamaño de fuente pequeño */
+  color: #666; /* Color gris */
+}
+
+/* Estilo de la barra de búsqueda */
+.product-expire-search-bar input {
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ddd; /* Borde gris claro */
+  border-radius: 4px; /* Bordes redondeados */
+  font-size: 14px; /* Tamaño de fuente estándar */
+  margin-top: 15px; /* Espacio superior */
+}
+
+/* Estilos de la tabla */
+.product-expire-table {
+  width: 100%; /* Ancho completo */
+  border-collapse: collapse; /* Colapsa los bordes de las celdas */
+  margin-top: 10px; /* Espacio superior */
+}
+
+/* Estilos para las celdas de la tabla */
+.product-expire-table th,
+.product-expire-table td {
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ddd; /* Borde gris claro */
+  text-align: left; /* Texto alineado a la izquierda */
+}
+
+/* Estilos para los encabezados de la tabla */
+.product-expire-table th {
+  background-color: #f0f0f0; /* Fondo gris claro */
+  font-weight: bold; /* Texto en negrita */
+}
+
+/* Estilo para resaltar la fila cuando el mouse está sobre ella */
+.product-expire-table tr:hover {
+  background-color: #f9f9f9; /* Fondo más claro */
+}
+
+/* Modo oscuro para el contenedor de productos por vencer */
+body.dark-mode .product-expire-list {
+  background-color: #000000; /* Fondo negro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para el título de productos por vencer */
+body.dark-mode .product-expire-list h2 {
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para la descripción debajo del título */
+body.dark-mode .product-expire-list p {
+  color: #cccccc; /* Texto gris claro */
+}
+
+/* Estilo para el mensaje de "No hay productos próximos a vencer en 3 días" */
+.no-expiring-products-message {
+  font-size: 18px; /* Tamaño de fuente más grande */
+  font-weight: bold; /* Texto en negrita */
+  text-align: center; /* Centra el texto horizontalmente */
+  margin: 20px 0; /* Margen superior e inferior */
+  color: #666; /* Color gris */
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  height: 100px; /* Altura para centrar en el contenedor */
+}
+
+/* Modo oscuro para la barra de búsqueda */
+body.dark-mode .product-expire-search-bar input {
+  background-color: #333333; /* Fondo gris oscuro */
+  border: 1px solid #555555; /* Borde gris oscuro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para la tabla de productos por vencer */
+body.dark-mode .product-expire-table {
+  background-color: #000000; /* Fondo negro */
+  color: #ffffff; /* Texto blanco */
+}
+
+body.dark-mode .product-expire-table th,
+body.dark-mode .product-expire-table td {
+  background-color: #000000; /* Fondo negro para las celdas */
+  border: 1px solid #ffffff; /* Bordes blancos */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para los encabezados de la tabla */
+body.dark-mode .product-expire-table th {
+  background-color: #333333; /* Fondo gris oscuro */
+  font-weight: bold; /* Texto en negrita */
+}
+
+/* Modo oscuro para resaltar la fila cuando el mouse está sobre ella */
+body.dark-mode .product-expire-table tr:hover {
+  background-color: #555555; /* Fondo gris claro */
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------- */
+/* Estilo general para productos por acabarse */
+/* Contenedor de productos por acabarse */
+.product-finish-list {
+  background-color: #f9f9f9; /* Fondo claro */
+  padding: 40px; /* Espaciado interior */
+  border-radius: 8px; /* Bordes redondeados */
+  margin-top: 20px; /* Espacio superior */
+}
+
+/* Título de la lista de productos por acabarse */
+.product-finish-list h2 {
+  font-size: 24px; /* Tamaño de fuente grande */
+  margin-bottom: 20px; /* Espacio debajo del título */
+}
+
+/* Descripción debajo del título */
+.product-finish-list p {
+  font-size: 14px; /* Tamaño de fuente pequeño */
+  color: #666; /* Color gris */
+}
+
+/* Estilo de la barra de búsqueda */
+.product-finish-search-bar input {
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ddd; /* Borde gris claro */
+  border-radius: 4px; /* Bordes redondeados */
+  font-size: 14px; /* Tamaño de fuente estándar */
+  margin-top: 15px; /* Espacio superior */
+}
+
+/* Estilos de la tabla */
+.product-finish-table {
+  width: 100%; /* Ancho completo */
+  border-collapse: collapse; /* Colapsa los bordes de las celdas */
+  margin-top: 10px; /* Espacio superior */
+}
+
+/* Estilos para las celdas de la tabla */
+.product-finish-table th,
+.product-finish-table td {
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ddd; /* Borde gris claro */
+  text-align: left; /* Texto alineado a la izquierda */
+}
+
+/* Estilos para los encabezados de la tabla */
+.product-finish-table th {
+  background-color: #f0f0f0; /* Fondo gris claro */
+  font-weight: bold; /* Texto en negrita */
+}
+
+/* Estilo para resaltar la fila cuando el mouse está sobre ella */
+.product-finish-table tr:hover {
+  background-color: #f9f9f9; /* Fondo más claro */
+}
+
+/* Modo oscuro para el contenedor de productos por acabarse */
+body.dark-mode .product-finish-list {
+  background-color: #000000; /* Fondo negro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para el título de productos por acabarse */
+body.dark-mode .product-finish-list h2 {
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para la descripción debajo del título */
+body.dark-mode .product-finish-list p {
+  color: #cccccc; /* Texto gris claro */
+}
+
+/* Estilo para el mensaje de "No hay productos próximos a acabarse" */
+.no-finishing-products-message {
+  font-size: 18px; /* Tamaño de fuente más grande */
+  font-weight: bold; /* Texto en negrita */
+  text-align: center; /* Centra el texto horizontalmente */
+  margin: 20px 0; /* Margen superior e inferior */
+  color: #666; /* Color gris */
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  height: 100px; /* Altura para centrar en el contenedor */
+}
+
+/* Modo oscuro para la barra de búsqueda */
+body.dark-mode .product-finish-search-bar input {
+  background-color: #333333; /* Fondo gris oscuro */
+  border: 1px solid #555555; /* Borde gris oscuro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para la tabla de productos por acabarse */
+body.dark-mode .product-finish-table {
+  background-color: #000000; /* Fondo negro */
+  color: #ffffff; /* Texto blanco */
+}
+
+body.dark-mode .product-finish-table th,
+body.dark-mode .product-finish-table td {
+  background-color: #000000; /* Fondo negro para las celdas */
+  border: 1px solid #ffffff; /* Bordes blancos */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Modo oscuro para los encabezados de la tabla */
+body.dark-mode .product-finish-table th {
+  background-color: #333333; /* Fondo gris oscuro */
+  font-weight: bold; /* Texto en negrita */
+}
+
+/* Modo oscuro para resaltar la fila cuando el mouse está sobre ella */
+body.dark-mode .product-finish-table tr:hover {
+  background-color: #555555; /* Fondo gris claro */
+}
+/* --------------------------------------------------------------------------------------------------------------------------- */
+/* Estilo general para productos expirados */
+/* Contenedor de productos expirados */
+.product-expired-list {
+  background-color: #f9f9f9;
+  padding: 40px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* Título de la lista de productos expirados */
+.product-expired-list h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Descripción debajo del título */
+.product-expired-list p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Estilo de la barra de búsqueda */
+.product-expired-search-bar input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+/* Estilos de la tabla */
+.product-expired-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+/* Estilos para las celdas de la tabla */
+.product-expired-table th,
+.product-expired-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Encabezados de la tabla */
+.product-expired-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+/* Estilo para resaltar la fila cuando el mouse está sobre ella */
+.product-expired-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Modo oscuro para el contenedor de productos expirados */
+body.dark-mode .product-expired-list {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Modo oscuro para el título de productos expirados */
+body.dark-mode .product-expired-list h2 {
+  color: #ffffff;
+}
+
+/* Modo oscuro para la descripción debajo del título */
+body.dark-mode .product-expired-list p {
+  color: #cccccc;
+}
+
+/* Modo oscuro para la barra de búsqueda */
+body.dark-mode .product-expired-search-bar input {
+  background-color: #333333;
+  border: 1px solid #555555;
+  color: #ffffff;
+}
+
+/* Modo oscuro para la tabla de productos expirados */
+body.dark-mode .product-expired-table {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+body.dark-mode .product-expired-table th,
+body.dark-mode .product-expired-table td {
+  background-color: #000000;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+}
+
+/* Modo oscuro para los encabezados de la tabla */
+body.dark-mode .product-expired-table th {
+  background-color: #333333;
+  font-weight: bold;
+}
+
+/* Modo oscuro para resaltar la fila cuando el mouse está sobre ella */
+body.dark-mode .product-expired-table tr:hover {
+  background-color: #555555;
+}
+
+/* Estilo para el mensaje de "No hay productos expirados" */
+.no-expired-products-message {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+  color: #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+/* Modo oscuro para el mensaje de "No hay productos expirados" */
+body.dark-mode .no-expired-products-message {
+  color: #cccccc;
+}
 
 /* --------------------------------------------------------------------------------------------------------------------------- */
 /* Estilos de login */

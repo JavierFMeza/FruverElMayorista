@@ -1,33 +1,59 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Importamos Link para redirección
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { toggleDarkMode, toggleTextSize } from '../utils/utils';
 import '../styles.css';
 
 function Home() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLargeText, setIsLargeText] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // Controla cuál menú desplegable está abierto en la sidebar
-  const [openTopMenu, setOpenTopMenu] = useState(null); // Controla cuál menú desplegable está abierto en la top navbar
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openTopMenu, setOpenTopMenu] = useState(null);
+  const [recentProducts, setRecentProducts] = useState([]);
+  const [recentLotes, setRecentLotes] = useState([]);
+  const [expiredProducts, setExpiredProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Efecto para manejar el modo oscuro en el body
-  React.useEffect(() => {
+  useEffect(() => {
     toggleDarkMode(isDarkMode);
   }, [isDarkMode]);
 
-  // Efecto para manejar el tamaño del texto en el body
-  React.useEffect(() => {
+  useEffect(() => {
     toggleTextSize(isLargeText);
   }, [isLargeText]);
 
-  // Función para alternar la visibilidad del menú desplegable en la sidebar
   const toggleDropdown = (menu) => {
-    setOpenDropdown(openDropdown === menu ? null : menu); // Cierra el menú abierto o abre el nuevo
+    setOpenDropdown(openDropdown === menu ? null : menu);
   };
 
-  // Función para alternar la visibilidad del menú desplegable en la top navbar
   const toggleTopMenu = (menu) => {
-    setOpenTopMenu(openTopMenu === menu ? null : menu); // Cierra el menú abierto o abre el nuevo en la top navbar
+    setOpenTopMenu(openTopMenu === menu ? null : menu);
   };
+
+  useEffect(() => {
+    const fetchRecentData = async () => {
+      setLoading(true);
+      try {
+        // Obtener productos recientemente añadidos
+        const productsResponse = await axios.get('http://localhost:3301/api/productos/recientes');
+        setRecentProducts(productsResponse.data);
+
+        // Obtener lotes recientemente añadidos
+        const lotesResponse = await axios.get('http://localhost:3301/api/lotes/recientes');
+        setRecentLotes(lotesResponse.data);
+
+        // Obtener productos expirados recientemente
+        const expiredResponse = await axios.get('http://localhost:3301/api/productos/expirados/recientes');
+        setExpiredProducts(expiredResponse.data);
+      } catch (error) {
+        console.error('Error al obtener datos recientes:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentData();
+  }, []);
 
   return (
     <div className="app">
@@ -46,10 +72,10 @@ function Home() {
             </a>
             {openDropdown === 'inventario' && (
               <ul className="dropdown-list">
-              <li><Link to="/productList">Lista de productos</Link></li>
-              <li><Link to="/productMod">Modificar Producto</Link></li>
-              <li><Link to="/loteAdd">Añadir Lote de producto</Link></li>
-              <li><Link to="/productAdd">Añadir Producto</Link></li>
+                <li><Link to="/productList">Lista de Lotes de productos</Link></li>
+                <li><Link to="/productMod">Modificar Lotes de productos</Link></li>
+                <li><Link to="/loteAdd">Añadir Lote de producto</Link></li>
+                <li><Link to="/productAdd">Añadir Producto</Link></li>
               </ul>
             )}
           </li>
@@ -59,9 +85,9 @@ function Home() {
             </a>
             {openDropdown === 'reportes' && (
               <ul className="dropdown-list">
-                <li><Link to="/productExpire">Productos por vencer</Link></li>
-                <li><Link to="/productFinish">Productos por acabarse</Link></li>
-                <li><Link to="/productBest">Productos más vendidos</Link></li>
+                <li><Link to="/productExpire">Lotes de productos por vencer</Link></li>
+                <li><Link to="/productFinish">Lotes de productos por acabarse</Link></li>
+                <li><Link to="/productExpired">Lotes de productos ya expirados</Link></li>
               </ul>
             )}
           </li>
@@ -113,81 +139,100 @@ function Home() {
           </div>
         </div>
 
-        {/* Aquí el contenido de productos y tablas */}
-        <div className="header">
-          <h2>Productos recientemente añadidos</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Productos</th>
-                <th>Precio</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Manzanas rojas</td>
-                <td>$1,000</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Cerezas</td>
-                <td>$1,500</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Bananas</td>
-                <td>$800</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Cebolla larga</td>
-                <td>$700</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        {loading ? (
+          <p>Cargando datos recientes...</p>
+        ) : (
+          <>
+            {/* Productos recientemente añadidos */}
+            <div className="recent-products">
+              <h3>Productos Recientemente Añadidos</h3>
+              {recentProducts.length === 0 ? (
+                <p>No hay productos recientes.</p>
+              ) : (
+                <table className="product-table">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Precio</th>
+                      <th>Días para Vencimiento</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentProducts.map((product) => (
+                      <tr key={product.id}>
+                        <td>{product.nombre}</td>
+                        <td>${product.precio}</td>
+                        <td>{product.diasParaVencimiento}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
 
-        <div className="expired-products">
-          <h2>Productos expirados</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>SNo</th>
-                <th>Código del producto</th>
-                <th>Nombre del producto</th>
-                <th>Fecha de vencimiento</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>IT0001</td>
-                <td>Naranja</td>
-                <td>1-10-2024</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>IT0002</td>
-                <td>Piña</td>
-                <td>5-10-2024</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>IT0003</td>
-                <td>Strawberry</td>
-                <td>2-10-2024</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>IT0004</td>
-                <td>Avocado</td>
-                <td>6-10-2024</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+            {/* Lotes recientemente añadidos */}
+            <div className="recent-lotes">
+              <h3>Lotes Recientemente Añadidos</h3>
+              {recentLotes.length === 0 ? (
+                <p>No hay lotes recientes.</p>
+              ) : (
+                <table className="product-table">
+                  <thead>
+                    <tr>
+                      <th>Código Lote</th>
+                      <th>Cantidad</th>
+                      <th>Fecha de Entrada</th>
+                      <th>Producto</th>
+                      <th>Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentLotes.map((lote) => (
+                      <tr key={lote.codigoLote}>
+                        <td>{lote.codigoLote}</td>
+                        <td>{lote.cantidadLote}</td>
+                        <td>{new Date(lote.fechaEntrada).toISOString().split('T')[0]}</td>
+                        <td>{lote.nombreProducto}</td>
+                        <td>${lote.precioProducto}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            {/* Productos ya expirados */}
+            <div className="expired-products">
+              <h3>Productos Expirados Recientemente</h3>
+              {expiredProducts.length === 0 ? (
+                <p>No hay productos expirados recientemente.</p>
+              ) : (
+                <table className="product-table">
+                  <thead>
+                    <tr>
+                      <th>Código Lote</th>
+                      <th>Producto</th>
+                      <th>Cantidad</th>
+                      <th>Fecha de Entrada</th>
+                      <th>Días Desde Vencimiento</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {expiredProducts.map((product) => (
+                      <tr key={product.codigoLote}>
+                        <td>{product.codigoLote}</td>
+                        <td>{product.nombreProducto}</td>
+                        <td>{product.cantidadLote}</td>
+                        <td>{new Date(product.fechaEntrada).toISOString().split('T')[0]}</td>
+                        <td>{product.diasDesdeVencimiento}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Footer */}
@@ -196,7 +241,7 @@ function Home() {
         <ul>
           <li><Link to="/rights">Política de privacidad</Link></li>
           <li><a href="#">Términos de servicio</a></li>
-          <li><a href="https://w.app/MWKxIe" target="_blank" rel="link de contacto">Contacto</a></li>
+          <li><a href="#">Contacto</a></li>
         </ul>
       </footer>
     </div>

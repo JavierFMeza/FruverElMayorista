@@ -7,8 +7,8 @@ import '../styles.css';
 function ProductMod() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLargeText, setIsLargeText] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // Controla cuál menú desplegable está abierto en la sidebar
-  const [openTopMenu, setOpenTopMenu] = useState(null); // Controla cuál menú desplegable está abierto en la top navbar
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openTopMenu, setOpenTopMenu] = useState(null);
   const [inventory, setInventory] = useState([]);
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -129,10 +129,10 @@ function ProductMod() {
             </a>
             {openDropdown === 'inventario' && (
               <ul className="dropdown-list">
-              <li><Link to="/productList">Lista de productos</Link></li>
-              <li><Link to="/productMod">Modificar Producto</Link></li>
-              <li><Link to="/loteAdd">Añadir Lote de producto</Link></li>
-              <li><Link to="/productAdd">Añadir Producto</Link></li>
+                <li><Link to="/productList">Lista de Lotes de productos</Link></li>
+                <li><Link to="/productMod">Modificar Lotes de productos</Link></li>
+                <li><Link to="/loteAdd">Añadir Lote de producto</Link></li>
+                <li><Link to="/productAdd">Añadir Producto</Link></li>
               </ul>
             )}
           </li>
@@ -142,9 +142,9 @@ function ProductMod() {
             </a>
             {openDropdown === 'reportes' && (
               <ul className="dropdown-list">
-                <li><Link to="/productExpire">Productos por vencer</Link></li>
-                <li><Link to="/productFinish">Productos por acabarse</Link></li>
-                <li><Link to="/productBest">Productos más vendidos</Link></li>
+                <li><Link to="/productExpire">Lotes de productos por vencer</Link></li>
+                <li><Link to="/productFinish">Lotes de productos por acabarse</Link></li>
+                <li><Link to="/productExpired">Lotes de productos ya expirados</Link></li>
               </ul>
             )}
           </li>
@@ -155,8 +155,8 @@ function ProductMod() {
       <div className="main-content">
         {/* Top Navbar */}
         <div className="top-navbar">
-          {/* Accessibility Icon */}
           <div className="nav-icons">
+            {/* Accessibility Icon */}
             <div className="nav-item" id="accessibility">
               <i className="icon" onClick={() => toggleTopMenu('accessibility')}>&#9881;</i>
               {openTopMenu === 'accessibility' && (
@@ -167,9 +167,9 @@ function ProductMod() {
                   </ul>
                 </div>
               )}
+            </div>
 
             {/* Notification Icon */}
-            </div>
             <div className="nav-item" id="notification">
               <i className="icon" onClick={() => toggleTopMenu('notification')}>&#128276;</i>
               {openTopMenu === 'notification' && (
@@ -179,8 +179,9 @@ function ProductMod() {
                   </ul>
                 </div>
               )}
-            {/* User Icon */}
             </div>
+
+            {/* User Icon */}
             <div className="nav-item" id="user">
               <i className="icon" onClick={() => toggleTopMenu('user')}>&#128100;</i>
               {openTopMenu === 'user' && (

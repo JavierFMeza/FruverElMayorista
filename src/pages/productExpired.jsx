@@ -1,56 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { toggleDarkMode, toggleTextSize } from '../utils/utils';
 import '../styles.css';
 
-function LoteAdd() {
+function ProductExpired() {
+  const [expiredProducts, setExpiredProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLargeText, setIsLargeText] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [openTopMenu, setOpenTopMenu] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Estados para el formulario de Lote
-  const [fechaEntrada, setFechaEntrada] = useState('');
-  const [idUsuario, setIdUsuario] = useState('');
-  const [idProductos, setIdProductos] = useState('');
-  const [cantidad, setCantidad] = useState('');
-  const [usuarios, setUsuarios] = useState([]);
-  const [productos, setProductos] = useState([]);
-
-  // Obtener usuarios y productos desde el backend
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const usuariosResponse = await axios.get('http://localhost:3301/api/usuarios');
-        const productosResponse = await axios.get('http://localhost:3301/api/productos');
-        setUsuarios(usuariosResponse.data);
-        setProductos(productosResponse.data);
-      } catch (error) {
-        console.error('Error al obtener usuarios o productos:', error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3301/api/lotes', {
-        fechaEntrada,
-        idUsuario,
-        idProductos,
-        cantidad,
-      });
-      console.log('Lote añadido:', response.data);
-      alert('Lote añadido exitosamente.');
-    } catch (error) {
-      console.error('Error al añadir lote:', error);
-      alert('Error al añadir el lote.');
-    }
-  };
-
-  // Funciones para alternar el modo oscuro y el tamaño de texto
   useEffect(() => {
     toggleDarkMode(isDarkMode);
   }, [isDarkMode]);
@@ -58,6 +20,23 @@ function LoteAdd() {
   useEffect(() => {
     toggleTextSize(isLargeText);
   }, [isLargeText]);
+
+  useEffect(() => {
+    const fetchExpiredProducts = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get('http://localhost:3301/api/productos/expirados', {
+          params: { search: searchTerm },
+        });
+        setExpiredProducts(response.data);
+      } catch (error) {
+        console.error('Error al obtener productos expirados:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExpiredProducts();
+  }, [searchTerm]);
 
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
@@ -151,76 +130,55 @@ function LoteAdd() {
           </div>
         </div>
 
-        <div className="lote-add-form">
-          <h2>Añadir nuevo lote</h2>
-          <p>Crear nuevo lote</p>
-          <form onSubmit={handleSubmit}>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="fechaEntrada">Fecha de Entrada</label>
-                <input 
-                  type="date" 
-                  id="fechaEntrada" 
-                  value={fechaEntrada}
-                  onChange={(e) => setFechaEntrada(e.target.value)} 
-                  required 
-                />
-              </div>
+        {/* Tabla de productos ya expirados */}
+        <div className="product-expired-list">
+          <h2>Productos Expirados</h2>
+          <p>Lista de productos que ya han expirado.</p>
 
-              <div className="form-group">
-                <label htmlFor="idUsuario">Usuario</label>
-                <select 
-                  id="idUsuario" 
-                  value={idUsuario}
-                  onChange={(e) => setIdUsuario(e.target.value)} 
-                  required
-                >
-                  <option value="">Selecciona un usuario</option>
-                  {usuarios.map(usuario => (
-                    <option key={usuario.id} value={usuario.id}>
-                      {usuario.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          {/* Barra de búsqueda */}
+          <input
+            type="text"
+            placeholder="Buscar producto..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
 
-              <div className="form-group">
-                <label htmlFor="idProductos">Producto</label>
-                <select 
-                  id="idProductos" 
-                  value={idProductos}
-                  onChange={(e) => setIdProductos(e.target.value)} 
-                  required
-                >
-                  <option value="">Selecciona un producto</option>
-                  {productos.map(producto => (
-                    <option key={producto.id} value={producto.id}>
-                      {producto.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="cantidad">Cantidad</label>
-                <input 
-                  type="number" 
-                  id="cantidad" 
-                  value={cantidad}
-                  onChange={(e) => setCantidad(e.target.value)} 
-                  required 
-                />
-              </div>
-            </div>
-
-            <div className="form-actions">
-              <button type="submit" className="btn-confirm">Confirmar</button>
-              <button type="button" className="btn-cancel">Cancelar</button>
-            </div>
-          </form>
+          {loading ? (
+            <p>Cargando...</p>
+          ) : expiredProducts.length === 0 ? (
+            <div className="no-expired-products-message">No hay productos expirados.</div>
+          ) : (
+            <table className="product-expired-table">
+              <thead>
+                <tr>
+                  <th>Código Lote</th>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Fecha de Entrada</th>
+                  <th>Creado por</th>
+                  <th>Días Desde Vencimiento</th>
+                </tr>
+              </thead>
+              <tbody>
+                {expiredProducts.map((item) => (
+                  <tr key={item.codigoLote}>
+                    <td>{item.codigoLote}</td>
+                    <td>{item.nombreProducto}</td>
+                    <td>${item.precioProducto}</td>
+                    <td>{item.cantidadLote}</td>
+                    <td>{new Date(item.fechaEntrada).toISOString().split('T')[0]}</td>
+                    <td>{item.nombreUsuario}</td>
+                    <td>{item.diasDesdeVencimiento}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 
+      {/* Footer */}
       <footer>
         <p>&copy; 2024 Fruver. Todos los derechos reservados.</p>
         <ul>
@@ -233,4 +191,4 @@ function LoteAdd() {
   );
 }
 
-export default LoteAdd;
+export default ProductExpired;

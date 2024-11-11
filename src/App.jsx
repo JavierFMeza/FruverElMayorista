@@ -5,7 +5,7 @@ import Login from './pages/login'; // Importa los demás componentes
 import LoginNew from './pages/loginNew';
 import Notification from './pages/notification';
 import ProductAdd from './pages/productAdd';
-import ProductBest from './pages/productBest';
+import ProductExpired from './pages/productExpired';
 import ProductExpire from './pages/productExpire';
 import ProductFinish from './pages/productFinish';
 import ProductList from './pages/productList';
@@ -23,7 +23,7 @@ function App() {
         <Route path="/loginNew" element={<LoginNew />} />
         <Route path="/notification" element={<Notification />} />
         <Route path="/productAdd" element={<ProductAdd />} />
-        <Route path="/productBest" element={<ProductBest />} />
+        <Route path="/productExpired" element={<ProductExpired />} />
         <Route path="/productExpire" element={<ProductExpire />} />
         <Route path="/productFinish" element={<ProductFinish />} />
         <Route path="/productList" element={<ProductList />} />
