@@ -1016,6 +1016,35 @@ body.dark-mode .product-finish-table th {
 body.dark-mode .product-finish-table tr:hover {
   background-color: #555555; /* Fondo gris claro */
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.pagination button:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.pagination select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 /* --------------------------------------------------------------------------------------------------------------------------- */
 /* Estilo general para productos expirados */
 /* Contenedor de productos expirados */

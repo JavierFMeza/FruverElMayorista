@@ -12,7 +12,14 @@ function ProductExpire() {
   const [expiringProducts, setExpiringProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 15; // Número de filas por página
   
+  const filteredExpiringProducts = expiringProducts.filter((item) =>
+    item.nombreProducto.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredExpiringProducts.length / rowsPerPage); // Total de páginas
 
   useEffect(() => {
     toggleDarkMode(isDarkMode);
@@ -147,35 +154,66 @@ function ProductExpire() {
 
           {loading ? (
             <p>Cargando...</p>
-          ) : expiringProducts.length === 0 ? (
+          ) : filteredExpiringProducts.length === 0 ? (
             <div className="no-expiring-products-message">No hay productos próximos a vencer en 3 días.</div>
           ) : (
-            <table className="product-expire-table">
-              <thead>
-                <tr>
-                  <th>Código Lote</th>
-                  <th>Producto</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
-                  <th>Fecha de Entrada</th>
-                  <th>Creado por</th>
-                  <th>Días Restantes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {expiringProducts.map((item) => (
-                  <tr key={item.codigoLote}>
-                    <td>{item.codigoLote}</td>
-                    <td>{item.nombreProducto}</td>
-                    <td>${item.precioProducto}</td>
-                    <td>{item.cantidadLote}</td>
-                    <td>{new Date(item.fechaEntrada).toISOString().split('T')[0]}</td>
-                    <td>{item.nombreUsuario}</td>
-                    <td>{item.diasRestantes}</td>
+            <>
+              <table className="product-expire-table">
+                <thead>
+                  <tr>
+                    <th>Código Lote</th>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Fecha de Entrada</th>
+                    <th>Creado por</th>
+                    <th>Días Restantes</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {/* Mostrar filas paginadas */}
+                  {filteredExpiringProducts
+                    .slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+                    .map((item) => (
+                      <tr key={item.codigoLote}>
+                        <td>{item.codigoLote}</td>
+                        <td>{item.nombreProducto}</td>
+                        <td>${item.precioProducto}</td>
+                        <td>{item.cantidadLote}</td>
+                        <td>{new Date(item.fechaEntrada).toISOString().split('T')[0]}</td>
+                        <td>{item.nombreUsuario}</td>
+                        <td>{item.diasRestantes}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+
+              {/* Paginación */}
+              <div className="pagination">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  Anterior
+                </button>
+                <select
+                  value={currentPage}
+                  onChange={(e) => setCurrentPage(Number(e.target.value))}
+                >
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      Página {i + 1}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  Siguiente
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>

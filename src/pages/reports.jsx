@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import {Chart as ChartJS,CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 import { toggleDarkMode, toggleTextSize } from '../utils/utils';
 import '../styles.css';
 
-function Home() {
+ChartJS.register(CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend);
+
+function Report() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLargeText, setIsLargeText] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [openTopMenu, setOpenTopMenu] = useState(null);
-  const [recentProducts, setRecentProducts] = useState([]);
-  const [recentLotes, setRecentLotes] = useState([]);
-  const [expiredProducts, setExpiredProducts] = useState([]);
+  const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lotUserChartData, setLotUserChartData] = useState(null);
 
   useEffect(() => {
     toggleDarkMode(isDarkMode);
@@ -31,29 +34,68 @@ function Home() {
   };
 
   useEffect(() => {
-    const fetchRecentData = async () => {
+    const fetchReportData = async () => {
       setLoading(true);
       try {
-        // Obtener productos recientemente añadidos
-        const productsResponse = await axios.get('http://localhost:3301/api/productos/recientes');
-        setRecentProducts(productsResponse.data);
+        const response = await axios.get('http://localhost:3301/api/reportes/productos_mas_movidos');
+        const data = response.data;
 
-        // Obtener lotes recientemente añadidos
-        const lotesResponse = await axios.get('http://localhost:3301/api/lotes/recientes');
-        setRecentLotes(lotesResponse.data);
+        // Procesar datos para el gráfico
+        const labels = data.map((item) => item.nombreProducto);
+        const quantities = data.map((item) => item.totalCantidad);
 
-        // Obtener productos expirados recientemente
-        const expiredResponse = await axios.get('http://localhost:3301/api/productos/expirados/recientes');
-        setExpiredProducts(expiredResponse.data);
+        setChartData({
+          labels,
+          datasets: [
+            {
+              label: 'mayor cantidad total de lotes',
+              data: quantities,
+              backgroundColor: 'rgba(75, 192, 192, 0.6)', // Color de las barras
+              borderColor: 'rgba(75, 192, 192, 1)', // Borde de las barras
+              borderWidth: 1,
+            },
+          ],
+        });
       } catch (error) {
-        console.error('Error al obtener datos recientes:', error);
+        console.error('Error al obtener datos para el gráfico:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchRecentData();
+    fetchReportData();
   }, []);
+
+  useEffect(() => {
+    const fetchLotUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3301/api/reportes/usuarios_mas_lotes');
+        const data = response.data;
+
+        // Procesar datos para el gráfico
+        const labels = data.map((item) => item.nombreUsuario);
+        const lotCounts = data.map((item) => item.totalLotesIngresados);
+
+        setLotUserChartData({
+          labels,
+          datasets: [
+            {
+              label: 'Lotes Ingresados',
+              data: lotCounts,
+              backgroundColor: 'rgba(153, 102, 255, 0.6)', // Color de las barras
+              borderColor: 'rgba(153, 102, 255, 1)', // Borde de las barras
+              borderWidth: 1,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error('Error al obtener datos para el gráfico de lotes por usuario:', error);
+      }
+    };
+
+    fetchLotUserData();
+  }, []);
+
 
   return (
     <div className="app">
@@ -88,7 +130,6 @@ function Home() {
                 <li><Link to="/productExpire">Lotes de productos por vencer</Link></li>
                 <li><Link to="/productFinish">Lotes de productos por acabarse</Link></li>
                 <li><Link to="/productExpired">Lotes de productos ya expirados</Link></li>
-                <li><Link to="/reports">Reporte de consolidados</Link></li>
               </ul>
             )}
           </li>
@@ -140,100 +181,78 @@ function Home() {
           </div>
         </div>
 
-        {loading ? (
-          <p>Cargando datos recientes...</p>
-        ) : (
-          <>
-            {/* Productos recientemente añadidos */}
-            <div className="recent-products">
-              <h3>Productos Recientemente Añadidos</h3>
-              {recentProducts.length === 0 ? (
-                <p>No hay productos recientes.</p>
-              ) : (
-                <table className="product-table">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Precio</th>
-                      <th>Días para Vencimiento</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {recentProducts.map((product) => (
-                      <tr key={product.id}>
-                        <td>{product.nombre}</td>
-                        <td>${product.precio}</td>
-                        <td>{product.diasParaVencimiento}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-
-            {/* Lotes recientemente añadidos */}
-            <div className="recent-lotes">
-              <h3>Lotes Recientemente Añadidos</h3>
-              {recentLotes.length === 0 ? (
-                <p>No hay lotes recientes.</p>
-              ) : (
-                <table className="product-table">
-                  <thead>
-                    <tr>
-                      <th>Código Lote</th>
-                      <th>Cantidad</th>
-                      <th>Fecha de Entrada</th>
-                      <th>Producto</th>
-                      <th>Precio</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {recentLotes.map((lote) => (
-                      <tr key={lote.codigoLote}>
-                        <td>{lote.codigoLote}</td>
-                        <td>{lote.cantidadLote}</td>
-                        <td>{new Date(lote.fechaEntrada).toISOString().split('T')[0]}</td>
-                        <td>{lote.nombreProducto}</td>
-                        <td>${lote.precioProducto}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-
-            {/* Productos ya expirados */}
-            <div className="expired-products">
-              <h3>Productos Expirados Recientemente</h3>
-              {expiredProducts.length === 0 ? (
-                <p>No hay productos expirados recientemente.</p>
-              ) : (
-                <table className="product-table">
-                  <thead>
-                    <tr>
-                      <th>Código Lote</th>
-                      <th>Producto</th>
-                      <th>Cantidad</th>
-                      <th>Fecha de Entrada</th>
-                      <th>Días Desde Vencimiento</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {expiredProducts.map((product) => (
-                      <tr key={product.codigoLote}>
-                        <td>{product.codigoLote}</td>
-                        <td>{product.nombreProducto}</td>
-                        <td>{product.cantidadLote}</td>
-                        <td>{new Date(product.fechaEntrada).toISOString().split('T')[0]}</td>
-                        <td>{product.diasDesdeVencimiento}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </>
-        )}
+        {/* Gráfico de barras */}
+        <div style={{ width: '50%', margin: 'auto', padding: '20px' }}>
+          <h2>Reporte: Productos con la mayor cantidad total de lotes</h2>
+          {loading ? (
+            <p>Cargando gráfico...</p>
+          ) : (
+            chartData && (
+              <Bar
+                data={chartData}
+                options={{
+                  responsive: true,
+                  plugins: {
+                    legend: {
+                      display: true,
+                      position: 'top',
+                    },
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Cantidad Total',
+                      },
+                    },
+                    x: {
+                      title: {
+                        display: true,
+                        text: 'Productos',
+                      },
+                    },
+                  },
+                }}
+              />
+            )
+          )}
+        </div>
+        {/* Gráfico de usuarios con más lotes */}
+        <div style={{ width: '50%', margin: 'auto', padding: '20px' }}>
+            <h2>Reporte: Usuarios con Más Lotes Ingresados</h2>
+            {lotUserChartData ? (
+            <Bar
+                data={lotUserChartData}
+                options={{
+                responsive: true,
+                plugins: {
+                    legend: {
+                    display: true,
+                    position: 'top',
+                    },
+                },
+                scales: {
+                    y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Cantidad de Lotes',
+                    },
+                    },
+                    x: {
+                    title: {
+                        display: true,
+                        text: 'Usuarios',
+                    },
+                    },
+                },
+                }}
+            />
+            ) : (
+            <p>Cargando gráfico de lotes...</p>
+            )}
+        </div>
       </div>
 
       {/* Footer */}
@@ -249,4 +268,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Report;

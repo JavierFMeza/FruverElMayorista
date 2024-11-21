@@ -13,6 +13,16 @@ function ProductMod() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [editProduct, setEditProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const rowsPerPage = 15; // Número de filas por página
+  
+
+  const filteredInventory = inventory.filter((item) =>
+    item.nombreProducto.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredInventory.length / rowsPerPage); // Total de páginas
 
     // Efecto para manejar el modo oscuro en el body
     React.useEffect(() => {
@@ -36,22 +46,28 @@ function ProductMod() {
 
   // Cargar inventario y productos al iniciar
   const fetchInventory = async () => {
+    setLoading(true); // Inicia el estado de carga
     try {
       const response = await axios.get('http://localhost:3301/api/inventario');
       setInventory(response.data);
     } catch (error) {
       alert('Error al obtener el inventario.');
       console.error('Error al obtener inventario:', error);
+    } finally {
+      setLoading(false); // Termina el estado de carga
     }
   };
-
+  
   const fetchProducts = async () => {
+    setLoading(true); // Inicia el estado de carga
     try {
       const response = await axios.get('http://localhost:3301/api/productos');
       setProducts(response.data);
     } catch (error) {
       alert('Error al obtener productos.');
       console.error('Error al obtener productos:', error);
+    } finally {
+      setLoading(false); // Termina el estado de carga
     }
   };
 
@@ -64,9 +80,6 @@ function ProductMod() {
     setSearchTerm(e.target.value);
   };
 
-  const filteredInventory = inventory.filter((item) =>
-    item.nombreProducto.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   const startEdit = (product) => {
     setEditProduct({ ...product });
@@ -196,83 +209,118 @@ function ProductMod() {
           </div>
         </div>
 
-        {/* Tabla de modificar productos */}
-        <div className="product-list">
-          <h2>Modificar Productos</h2>
-          <p>Busca, modifica o elimina productos</p>
+          {/* Tabla de modificar productos */}
+          <div className="product-list">
+            <h2>Modificar Productos</h2>
+            <p>Busca, modifica o elimina productos</p>
 
-          {/* Barra de búsqueda */}
-          <input
-            type="text"
-            placeholder="Buscar producto..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
+            {/* Barra de búsqueda */}
+            <input
+              type="text"
+              placeholder="Buscar producto..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
 
-          <table className="product-table">
-            <thead>
-              <tr>
-                <th>Código Lote</th>
-                <th>Nombre</th>
-                <th>Cantidad</th>
-                <th>Fecha de Entrada</th>
-                <th>Creado por</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredInventory.map((product) => (
-                <tr key={product.codigoLote}>
-                  <td>{product.codigoLote}</td>
-                  <td>
-                    {editProduct && editProduct.codigoLote === product.codigoLote ? (
-                      <select
-                        name="idProductos"
-                        value={editProduct.idProductos}
-                        onChange={handleSelectChange}
-                      >
-                        {products.map((prod) => (
-                          <option key={prod.id} value={prod.id}>
-                            {prod.nombre}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      product.nombreProducto
-                    )}
-                  </td>
-                  <td>
-                    {editProduct && editProduct.codigoLote === product.codigoLote ? (
-                      <input
-                        name="cantidadLote"
-                        value={editProduct.cantidadLote}
-                        onChange={handleEditChange}
-                      />
-                    ) : (
-                      product.cantidadLote
-                    )}
-                  </td>
-                  <td>{new Date(product.fechaEntrada).toISOString().split('T')[0]}</td>
-                  <td>{product.nombreUsuario}</td>
-                  <td>
-                    {editProduct && editProduct.codigoLote === product.codigoLote ? (
-                      <>
-                        <button onClick={saveEdit}>Guardar</button>
-                        <button onClick={cancelEdit}>Cancelar</button>
-                      </>
-                    ) : (
-                      <>
-                        <button onClick={() => startEdit(product)}>✏️</button>
-                        <button onClick={() => deleteProduct(product.codigoLote)}>🗑️</button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            {loading ? (
+              <p>Cargando inventario...</p>
+            ) : (
+              <>
+                <table className="product-table">
+                  <thead>
+                    <tr>
+                      <th>Código Lote</th>
+                      <th>Nombre</th>
+                      <th>Cantidad</th>
+                      <th>Fecha de Entrada</th>
+                      <th>Creado por</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* Mostrar filas paginadas */}
+                    {filteredInventory
+                      .slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+                      .map((product) => (
+                        <tr key={product.codigoLote}>
+                          <td>{product.codigoLote}</td>
+                          <td>
+                            {editProduct && editProduct.codigoLote === product.codigoLote ? (
+                              <select
+                                name="idProductos"
+                                value={editProduct.idProductos}
+                                onChange={handleSelectChange}
+                              >
+                                {products.map((prod) => (
+                                  <option key={prod.id} value={prod.id}>
+                                    {prod.nombre}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              product.nombreProducto
+                            )}
+                          </td>
+                          <td>
+                            {editProduct && editProduct.codigoLote === product.codigoLote ? (
+                              <input
+                                name="cantidadLote"
+                                value={editProduct.cantidadLote}
+                                onChange={handleEditChange}
+                              />
+                            ) : (
+                              product.cantidadLote
+                            )}
+                          </td>
+                          <td>{new Date(product.fechaEntrada).toISOString().split('T')[0]}</td>
+                          <td>{product.nombreUsuario}</td>
+                          <td>
+                            {editProduct && editProduct.codigoLote === product.codigoLote ? (
+                              <>
+                                <button onClick={saveEdit}>Guardar</button>
+                                <button onClick={cancelEdit}>Cancelar</button>
+                              </>
+                            ) : (
+                              <>
+                                <button onClick={() => startEdit(product)}>✏️</button>
+                                <button onClick={() => deleteProduct(product.codigoLote)}>🗑️</button>
+                              </>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+
+                {/* Paginación */}
+                <div className="pagination">
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Anterior
+                  </button>
+                  <select
+                    value={currentPage}
+                    onChange={(e) => setCurrentPage(Number(e.target.value))}
+                  >
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <option key={i + 1} value={i + 1}>
+                        Página {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
 
       {/* Footer */}
       <footer>

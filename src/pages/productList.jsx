@@ -12,6 +12,15 @@ function ProductList() {
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(''); // Estado para el término de búsqueda
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 15; // Número de filas por página
+
+  const totalPages = Math.ceil(inventory.length / rowsPerPage); // Total de páginas
+
+  // Aplicar búsqueda
+  const filteredInventory = inventory.filter((item) =>
+    item.nombreProducto.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     toggleDarkMode(isDarkMode);
@@ -58,11 +67,6 @@ function ProductList() {
   const toggleTopMenu = (menu) => {
     setOpenTopMenu(openTopMenu === menu ? null : menu);
   };
-
-  // Filtra los productos según el término de búsqueda
-  const filteredInventory = inventory.filter((item) =>
-    item.nombreProducto.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="app">
@@ -164,30 +168,59 @@ function ProductList() {
           {loading ? (
             <p>Cargando inventario...</p>
           ) : (
-            <table className="product-table">
-              <thead>
-                <tr>
-                  <th>Código Lote</th>
-                  <th>Producto</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
-                  <th>Fecha de Entrada</th>
-                  <th>Creado por</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredInventory.map((item) => (
-                  <tr key={item.codigoLote}>
-                    <td>{item.codigoLote}</td>
-                    <td>{item.nombreProducto}</td>
-                    <td>${item.precioProducto}</td>
-                    <td>{item.cantidadLote}</td>
-                    <td>{new Date(item.fechaEntrada).toISOString().split('T')[0]}</td>
-                    <td>{item.nombreUsuario}</td>
+            <>
+              <table className="product-table">
+                <thead>
+                  <tr>
+                    <th>Código Lote</th>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Fecha de Entrada</th>
+                    <th>Creado por</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {/* Marca esta parte para cambiar la cantidad de filas por página */}
+                  {filteredInventory.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage).map((item) => (
+                    <tr key={item.codigoLote}>
+                      <td>{item.codigoLote}</td>
+                      <td>{item.nombreProducto}</td>
+                      <td>${item.precioProducto}</td>
+                      <td>{item.cantidadLote}</td>
+                      <td>{new Date(item.fechaEntrada).toISOString().split('T')[0]}</td>
+                      <td>{item.nombreUsuario}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {/* Paginación */}
+              <div className="pagination">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  Anterior
+                </button>
+                <select
+                  value={currentPage}
+                  onChange={(e) => setCurrentPage(Number(e.target.value))}
+                >
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      Página {i + 1}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  Siguiente
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>
