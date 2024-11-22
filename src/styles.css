@@ -137,6 +137,32 @@ body {
     margin-left: 250px; /* Desplaza el contenido principal 250px a la derecha para dejar espacio al sidebar */
 }
 
+/* Text content styling */
+.text-content h1,
+.text-content h2 {
+  color: #2c3e50; /* Títulos en un gris azulado */
+  margin-bottom: 15px; /* Espaciado debajo de los títulos */
+  text-align: center; /* Centra los títulos */
+}
+
+.text-content p {
+  color: #555; /* Texto en gris oscuro */
+  line-height: 1.6; /* Mejora la legibilidad con espaciado entre líneas */
+  text-align: justify; /* Justifica el texto */
+  font-size: 16px; /* Tamaño de fuente moderado */
+  margin-bottom: 20px; /* Espaciado inferior */
+}
+
+.text-content a {
+  color: #3498db; /* Enlaces en azul */
+  text-decoration: none; /* Elimina el subrayado predeterminado */
+  font-weight: bold; /* Destaca los enlaces */
+}
+
+.text-content a:hover {
+  text-decoration: underline; /* Subraya el enlace al pasar el mouse */
+}
+
 /* Barra de navegación superior (Top Navbar) */
 .top-navbar {
   background-color: white; /* Fondo blanco */
@@ -175,27 +201,35 @@ body {
   background-color: white; /* Fondo blanco */
   border: 1px solid #ccc; /* Borde gris claro */
   border-radius: 5px; /* Bordes redondeados */
-  padding: 10px; /* Espaciado interior */
+  padding: 20px; /* Espaciado interior */
   z-index: 100; /* Asegura que el submenu esté por encima de otros elementos */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave para el submenu */
+  min-width: 200px; /* Ancho mínimo */
+  max-width: 300px; /* Ancho máximo */
+  word-wrap: break-word; /* Permite que el texto largo se ajuste */
+  white-space: normal; /* Permite que el texto largo se envuelva */
 }
 
 /* Lista dentro del submenu */
 .submenu ul {
   list-style: none; /* Elimina los puntos de la lista */
   padding: 0; /* Elimina el padding por defecto */
+  margin: 0; /* Elimina márgenes */
 }
 
 /* Elementos dentro de la lista del submenu */
 .submenu ul li {
   padding: 10px 20px; /* Espaciado dentro de cada ítem */
-  font-size: 14px; /* Tamaño de fuente más pequeño */
+  font-size: 14px; /* Tamaño de fuente */
+  line-height: 1.5; /* Altura de línea para mejorar la legibilidad */
 }
 
 /* Enlaces dentro del submenu */
 .submenu ul li a {
   text-decoration: none; /* Sin subrayado en los enlaces */
   color: #333; /* Color de texto gris oscuro */
+  display: inline-block; /* Asegura que los enlaces ocupen su contenido */
+  width: 100%; /* El enlace ocupa todo el ancho del contenedor */
 }
 
 /* Subrayado al pasar el mouse sobre un enlace del submenu */

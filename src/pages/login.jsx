@@ -21,7 +21,7 @@ function Login() {
 
       if (response.data.success) {
         // Redirigir a la página principal si el login es exitoso
-        navigate('/');
+        navigate('/home');
       } else {
         // Mostrar mensaje de error si el login falla
         setErrorMessage(response.data.message);

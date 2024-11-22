@@ -9,6 +9,8 @@ function LoteAdd() {
   const [isLargeText, setIsLargeText] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [openTopMenu, setOpenTopMenu] = useState(null);
+  const [notifications, setNotifications] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Estados para el formulario de Lote
   const [fechaEntrada, setFechaEntrada] = useState('');
@@ -49,6 +51,21 @@ function LoteAdd() {
       alert('Error al añadir el lote.');
     }
   };
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get('http://localhost:3301/api/notificaciones');
+        setNotifications(response.data);
+      } catch (error) {
+        console.error('Error al cargar notificaciones:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchNotifications();
+  }, []);
 
   // Funciones para alternar el modo oscuro y el tamaño de texto
   useEffect(() => {
@@ -100,6 +117,7 @@ function LoteAdd() {
                 <li><Link to="/productExpire">Lotes de productos por vencer</Link></li>
                 <li><Link to="/productFinish">Lotes de productos por acabarse</Link></li>
                 <li><Link to="/productExpired">Lotes de productos ya expirados</Link></li>
+                <li><Link to="/reports">Reporte de consolidados</Link></li>
               </ul>
             )}
           </li>
@@ -130,7 +148,35 @@ function LoteAdd() {
               {openTopMenu === 'notification' && (
                 <div className="submenu show">
                   <ul>
-                    <li><Link to="/notification">Ver Notificaciones</Link></li>
+                    {loading ? (
+                      <li>Cargando notificaciones...</li>
+                    ) : Object.keys(notifications || {}).length === 0 ? (
+                      <li>No hay notificaciones</li>
+                    ) : (
+                      <>
+                        {notifications.masCercano && (
+                          <li>
+                            Producto más cercano a vencerse:{' '}
+                            <Link to="/productExpire">
+                              {notifications.masCercano.producto} (
+                              {notifications.masCercano.diasRestantes} días restantes)
+                            </Link>
+                          </li>
+                        )}
+                        {notifications.expiraHoy && (
+                          <li>
+                            Producto que expira hoy:{' '}
+                            <Link to="/productExpired">{notifications.expiraHoy.producto}</Link>
+                          </li>
+                        )}
+                        {notifications.lotesHoy && (
+                          <li>
+                            Lotes añadidos hoy:{' '}
+                            <Link to="/productList">{notifications.lotesHoy.lotesHoy} lotes</Link>
+                          </li>
+                        )}
+                      </>
+                    )}
                   </ul>
                 </div>
               )}
@@ -142,7 +188,6 @@ function LoteAdd() {
               {openTopMenu === 'user' && (
                 <div className="submenu show">
                   <ul>
-                    <li><Link to="/userProfile">Perfil</Link></li>
                     <li><Link to="/login">Cerrar sesión</Link></li>
                   </ul>
                 </div>

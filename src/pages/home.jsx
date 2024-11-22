@@ -13,6 +13,8 @@ function Home() {
   const [recentLotes, setRecentLotes] = useState([]);
   const [expiredProducts, setExpiredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState(null);
+
 
   useEffect(() => {
     toggleDarkMode(isDarkMode);
@@ -54,6 +56,22 @@ function Home() {
 
     fetchRecentData();
   }, []);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get('http://localhost:3301/api/notificaciones');
+        setNotifications(response.data);
+      } catch (error) {
+        console.error('Error al cargar notificaciones:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchNotifications();
+  }, []);
+  
 
   return (
     <div className="app">
@@ -119,7 +137,35 @@ function Home() {
               {openTopMenu === 'notification' && (
                 <div className="submenu show">
                   <ul>
-                    <li><Link to="/notification">Ver Notificaciones</Link></li>
+                    {loading ? (
+                      <li>Cargando notificaciones...</li>
+                    ) : Object.keys(notifications || {}).length === 0 ? (
+                      <li>No hay notificaciones</li>
+                    ) : (
+                      <>
+                        {notifications.masCercano && (
+                          <li>
+                            Producto más cercano a vencerse:{' '}
+                            <Link to="/productExpire">
+                              {notifications.masCercano.producto} (
+                              {notifications.masCercano.diasRestantes} días restantes)
+                            </Link>
+                          </li>
+                        )}
+                        {notifications.expiraHoy && (
+                          <li>
+                            Producto que expira hoy:{' '}
+                            <Link to="/productExpired">{notifications.expiraHoy.producto}</Link>
+                          </li>
+                        )}
+                        {notifications.lotesHoy && (
+                          <li>
+                            Lotes añadidos hoy:{' '}
+                            <Link to="/productList">{notifications.lotesHoy.lotesHoy} lotes</Link>
+                          </li>
+                        )}
+                      </>
+                    )}
                   </ul>
                 </div>
               )}
@@ -131,7 +177,6 @@ function Home() {
               {openTopMenu === 'user' && (
                 <div className="submenu show">
                   <ul>
-                    <li><Link to="/userProfile">Perfil</Link></li>
                     <li><Link to="/login">Cerrar sesión</Link></li>
                   </ul>
                 </div>

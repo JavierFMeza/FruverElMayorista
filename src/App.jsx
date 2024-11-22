@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Im
 import Home from './pages/home'; // Importa el componente Home
 import Login from './pages/login'; // Importa los demás componentes
 import LoginNew from './pages/loginNew';
-import Notification from './pages/notification';
 import ProductAdd from './pages/productAdd';
 import ProductExpired from './pages/productExpired';
 import ProductExpire from './pages/productExpire';
@@ -11,7 +10,6 @@ import ProductFinish from './pages/productFinish';
 import ProductList from './pages/productList';
 import ProductMod from './pages/productMod';
 import Rights from './pages/rights';
-import UserProfile from './pages/userProfile';
 import LoteAdd from './pages/loteAdd';
 import Reports from './pages/reports';
 
@@ -19,10 +17,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/loginNew" element={<LoginNew />} />
-        <Route path="/notification" element={<Notification />} />
         <Route path="/productAdd" element={<ProductAdd />} />
         <Route path="/productExpired" element={<ProductExpired />} />
         <Route path="/productExpire" element={<ProductExpire />} />
@@ -30,7 +27,6 @@ function App() {
         <Route path="/productList" element={<ProductList />} />
         <Route path="/productMod" element={<ProductMod />} />
         <Route path="/rights" element={<Rights />} />
-        <Route path="/userProfile" element={<UserProfile />} />
         <Route path="/loteAdd" element={<LoteAdd />} />
         <Route path="/reports" element={<Reports />} />
       </Routes>

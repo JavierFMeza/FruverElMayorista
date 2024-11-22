@@ -14,6 +14,7 @@ function ProductList() {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para el término de búsqueda
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 15; // Número de filas por página
+  const [notifications, setNotifications] = useState(null);
 
   const totalPages = Math.ceil(inventory.length / rowsPerPage); // Total de páginas
 
@@ -60,6 +61,21 @@ function ProductList() {
     fetchInventory();
   }, [searchTerm]); // Ejecuta fetchInventory cuando searchTerm cambie
 
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get('http://localhost:3301/api/notificaciones');
+        setNotifications(response.data);
+      } catch (error) {
+        console.error('Error al cargar notificaciones:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchNotifications();
+  }, []);
+
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
@@ -101,6 +117,7 @@ function ProductList() {
                 <li><Link to="/productExpire">Lotes de productos por vencer</Link></li>
                 <li><Link to="/productFinish">Lotes de productos por acabarse</Link></li>
                 <li><Link to="/productExpired">Lotes de productos ya expirados</Link></li>
+                <li><Link to="/reports">Reporte de consolidados</Link></li>
               </ul>
             )}
           </li>
@@ -131,7 +148,35 @@ function ProductList() {
               {openTopMenu === 'notification' && (
                 <div className="submenu show">
                   <ul>
-                    <li><Link to="/notification">Ver Notificaciones</Link></li>
+                    {loading ? (
+                      <li>Cargando notificaciones...</li>
+                    ) : Object.keys(notifications || {}).length === 0 ? (
+                      <li>No hay notificaciones</li>
+                    ) : (
+                      <>
+                        {notifications.masCercano && (
+                          <li>
+                            Producto más cercano a vencerse:{' '}
+                            <Link to="/productExpire">
+                              {notifications.masCercano.producto} (
+                              {notifications.masCercano.diasRestantes} días restantes)
+                            </Link>
+                          </li>
+                        )}
+                        {notifications.expiraHoy && (
+                          <li>
+                            Producto que expira hoy:{' '}
+                            <Link to="/productExpired">{notifications.expiraHoy.producto}</Link>
+                          </li>
+                        )}
+                        {notifications.lotesHoy && (
+                          <li>
+                            Lotes añadidos hoy:{' '}
+                            <Link to="/productList">{notifications.lotesHoy.lotesHoy} lotes</Link>
+                          </li>
+                        )}
+                      </>
+                    )}
                   </ul>
                 </div>
               )}
@@ -143,7 +188,6 @@ function ProductList() {
               {openTopMenu === 'user' && (
                 <div className="submenu show">
                   <ul>
-                    <li><Link to="/userProfile">Perfil</Link></li>
                     <li><Link to="/login">Cerrar sesión</Link></li>
                   </ul>
                 </div>
