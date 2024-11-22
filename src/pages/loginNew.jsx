@@ -22,7 +22,7 @@ function LoginNew() {
       if (response.data.success) {
         alert('Registro exitoso, ahora puedes iniciar sesión.');
         // Aquí podrías redirigir al usuario a la página de login, por ejemplo:
-        // history.push('/login');
+        // history.push('/');
       } else {
         alert('Hubo un error en el registro: ' + response.data.message);
       }
@@ -104,7 +104,7 @@ function LoginNew() {
 
         {/* Link para iniciar sesión */}
         <div className="signup-link">
-          Ya tienes cuenta? <Link to="/login">Iniciar sesión</Link>
+          Ya tienes cuenta? <Link to="/">Iniciar sesión</Link>
         </div>
       </div>
     </div>

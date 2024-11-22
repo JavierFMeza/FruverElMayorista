@@ -75,11 +75,11 @@ const totalPages = Math.ceil(filteredFinishingProducts.length / rowsPerPage); //
       {/* Sidebar */}
       <div className="sidebar">
         <div className="logo">
-          <h1><Link to="/">FRUVER</Link></h1>
+          <h1><Link to="/home">FRUVER</Link></h1>
         </div>
         <ul className="menu">
           <li>
-            <Link to="/" className="menu-item">Página principal</Link>
+            <Link to="/home" className="menu-item">Página principal</Link>
           </li>
           <li>
             <a href="#" className="menu-item" onClick={() => toggleDropdown('inventario')}>
@@ -174,7 +174,7 @@ const totalPages = Math.ceil(filteredFinishingProducts.length / rowsPerPage); //
               {openTopMenu === 'user' && (
                 <div className="submenu show">
                   <ul>
-                    <li><Link to="/login">Cerrar sesión</Link></li>
+                    <li><Link to="/">Cerrar sesión</Link></li>
                   </ul>
                 </div>
               )}
